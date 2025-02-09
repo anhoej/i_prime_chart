@@ -1,30 +1,159 @@
 ---
-title: "I Prime Chart"
+title: "One Chart to Rule Them All"
+subtitle: "Can the I Prime Chart Replace Commonly Used Shewhart Control Charts? <hr>"
 author: "Anhøj & Mohammed"
 date: "2025-02-09"
-output: html_document
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo      = TRUE,
+                      fig.asp   = 0.5,
+                      fig.width = 9,
+                      message   = FALSE,
+                      dev       = 'svg')
+
+library(qicharts2)
+library(tidyverse)
+
+# Function to plot control limits from the In chart on top of Shewhart chart ---
+compplot <- function(x, y, n = NULL, chart, ...) {
+  p1 <- qic(x, y, n, chart = chart, ...)
+  p2 <- qic(x, y, n, chart = 'ip', ...)
+  
+  p1 +
+    geom_line(aes(y = lcl), data = p2$data, colour = 'tomato') +
+    geom_line(aes(y = ucl), data = p2$data, colour = 'tomato')
+}
 ```
 
-## R Markdown
+<hr>
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Questions
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+* Can the I prime chart replace U and P prime charts and I charts?
 
-```{r cars}
-summary(cars)
+* Is the I prime chart a better (or worse) representation of counts, rates, and proportions than the original C, U, and P charts?
+
+## Outline
+
+1. Introduction (which i can expand): Our aim in this paper is to introduce the i prime chart to healthcare practitioners and highlight its strengths and weakness. We begin with a simple use case based on proportion data which is common in healthcare.
+1. Proportion data
+1. Measurement data with denominator -
+1. Count data with no denominator
+1. Rate data with denominator
+1. Discussion
+    - Observations and conclusions
+    - Strengths, limitations, etc.
+    - Keen to learn what others think of it...?
+    - NB: Say something about run charts!
+
+----
+
+## Introduction
+
+Statistical Process Control (SPC) is a widely adopted methodology in healthcare to support quality improvement initiatives. A critical technical challenge in applying SPC is the selection of appropriate control charts, as the choice depends on the type of data being analyzed. For continuous (or measurement) data collected one at a time -- such as a patient’s daily blood pressure -- the I chart (individuals chart) is the most suitable option. Conversely, for attribute (or count) data -- such as the number of patients admitted to a hospital -- the standard suite of SPC charts, including the P, U, and C charts, are typically recommended.
+
+However, a point of contention arises when dealing with count data that is expressed as a ratio (e.g., percentage of mortality after surgery). Some practitioners advocate for the use of the I chart in such cases, despite its limitations. The I chart is designed to account for variation between subgroups and does consider variation within subgroups, which is a key feature of the standard attribute charts. This limitation makes the I chart a controversial choice for ratio-based count data, as real-world processes often exhibit within-subgroup and between-subgroup variation, both of which should be accommodated for accurate analysis.
+
+Recent advancements have extended the capabilities of the I chart to handle both measurement data and count data with denominators. This improved I chart (which we call the I prime or I\' chart) now offers a more robust solution for analyzing processes with inherent variability, making it a valuable tool for healthcare quality improvement efforts. This paper provides a tutorial review of this enhanced I chart, highlighting its applications and advantages in healthcare settings.
+
+## Appendix: test cases with code
+
+### Random normal data
+
+#### I chart
+
+```{r}
+set.seed(11)                  # fix random number generator
+x <- 1:24                     # subgroups
+y <- rnorm(24, 20, 3)         # numerators
+n <- runif(24, 90, 110)       # denominators
+
+compplot(x, y, chart = 'i')
 ```
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+compplot(x, y, n, chart = 'i')
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+```{r}
+compplot(x, y * n, n, chart = 'i')
+```
+
+#### Xbar chart
+
+```{r}
+set.seed(6)
+x <- rep(1:24, round(runif(24, 10, 20)))
+y <- rnorm(length(x), 9)
+compplot(x, y, chart = 'xbar')
+
+set.seed(1)
+x <- rep(1:24, round(runif(24, 10, 20)))
+y <- rnorm(length(x), 9)
+compplot(x, y, chart = 'xbar')
+
+set.seed(8)
+x <- rep(1:24, round(runif(24, 10, 20)))
+y <- rnorm(length(x), 9)
+compplot(x, y, chart = 'xbar')
+```
+
+### Random binomial data
+
+```{r}
+set.seed(1)
+x <- 1:24
+n <- round(runif(24, 100, 120))
+y <- rbinom(24, n, 0.1)
+compplot(x, y, n, 'p')
+compplot(x, y, n, 'pp')
+```
+
+### Random poisson data
+
+```{r}
+set.seed(2)
+x <- 1:24
+n <- round(runif(24, 1000, 1200))
+y <- rpois(24, 25)
+compplot(x, y, n, chart = 'u')
+compplot(x, y, n, 'up')
+
+```
+
+### Diabetes HbA1c data
+
+```{r}
+d <- read_csv('data/diabetes_hba1c.csv', comment = '#')
+compplot(d$month, d$hba1c, d$n, chart = 'i')        # WRONG!
+compplot(d$month, d$hba1c * d$n, d$n, chart = 'i')  # CORRECT!
+```
+
+
+### Bacteremia data
+
+```{r}
+d <- read_csv('data/bacteremia.csv', comment = '#')
+compplot(d$month, d$ha_infections, d$risk_days, chart = 'u')
+compplot(d$month, d$ha_infections, d$risk_days, chart = 'up')
+compplot(d$month, d$deaths, d$patients, chart = 'p')
+compplot(d$month, d$deaths, d$patients, chart = 'pp')
+
+```
+
+## Preliminary observations
+
+* The I prime chart is a very close match for U and P prime charts and the original I chart.
+
+* The I prime chart is often a reasonable match for C, U, P, and Xbar charts.
+
+* The I prime chart plots the ratio. If we want to plot the original y values (numerator) for measurement data, we must multiply the numerator and the denominator before plotting.
+
+* With multiple measurements or counts per subgroup, the mean is plotted, which may not be what we want (e.g. C and S charts). Use the agg.fun argument to specify.
