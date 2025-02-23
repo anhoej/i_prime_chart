@@ -4,10 +4,10 @@
 # 
 # Variables:
 #   month (date): month of measurements
-#   hba1c (numeric): average of HbA1c measurements
+#   avg_hba1c (numeric): average of HbA1c measurements
 #   n (integer): number of patients who visited the clinic
 
-month,hba1c,n
+month,avg_hba1c,n
 2019-03-01,59.3224299065421,214
 2019-04-01,60.2413793103448,203
 2019-05-01,58.0660377358491,212

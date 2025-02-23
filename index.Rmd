@@ -4,7 +4,8 @@ subtitle: "Can the I Prime Chart Replace Commonly Used Shewhart Control Charts? 
 author: "Anhøj & Mohammed"
 date: "`r Sys.Date()`"
 output: 
-  html_document:
+  bookdown::html_document2:
+  # html_document:
     toc: true
     toc_float: true
 editor_options: 
@@ -12,14 +13,19 @@ editor_options:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo      = TRUE,
+knitr::opts_chunk$set(echo      = FALSE,
+                      cache     = TRUE,
+                      message   = FALSE,
                       fig.asp   = 0.5,
                       fig.width = 9,
-                      message   = FALSE,
                       dev       = 'svg')
 
 library(qicharts2)
+# library(patchwork)
 library(tidyverse)
+
+bac <- read_csv('data/bacteremia.csv', comment = '#')
+hba1c <- read_csv('data/diabetes_hba1c.csv', comment = '#')
 
 # Function to plot control limits from the In chart on top of Shewhart chart ---
 compplot <- function(x, y, n = NULL, chart, ...) {
@@ -58,48 +64,162 @@ Recent advancements have extended the capabilities of the I chart to handle both
 
 ## Materials and methods
 
-...
+For this paper, we used two datasets to represent count and measurement data respectively.
+
+* **Bacteremia** data, 24 observations of 5 variables:
+    - month (date): month of infection
+    - ha_infections (numeric): number of hospital acquired infections
+    - risk_days (numeric): number of patient days without infection
+    - deaths (numeric): 30-day mortality after all-cause (community + hospital) infection
+    - patients (numeric): number of patients with all-cause infection
+
+* **Diabetes HbA1c** data, 43 observations of 3 variables:
+    - month (date): month of measurements
+    - avg_hba1c (numeric): average of HbA1c measurements
+    - n (integer): number of patients
+
+See appendix 1 for the complete data sets.
+
+To construct the control charts, we used the R package `qicharts2`, which contains functions for all of the classic Shewhart control charts in addition to functions for prime charts for proportions and rates and for the I prime chart, which is the focus of this study.
+
+To visualise the difference between the classic charts and the I prime chart, we wrote an R function that plots the control limits from the I prime chart on top of the classic chart.
+
+Data sets and R code are available from the GitHub repository (https://github.com/anhoej/i_prime_chart).
+
+We constructed control charts for monthly case proportions, event counts and rates, and average measurements with and without numerators.
+  
+Additionally -- not included in this paper -- we constructed hundreds of I prime charts using both random data from normal, binomial, and poisson distributions and many other data sets from clinical practice. See Appendix 2 for examples of additional plots.
 
 ## Results
 
-...
+From the two data sets, the following control charts were constructed:
 
-### Case proportion data
+* P and P prime charts for case **proportions**: bacteremia deaths / patients (Figures \@ref(fig:pchart) and \@ref(fig:ppchart))
 
-...
+* C and I charts for event **counts**: bacteremia ha_infections (Figures \@ref(fig:cchart) and \@ref(fig:icountchart))
 
-### Event rate data
+* U and U prime charts for event **rates**: bacteremmia  ha_infections / risk_days (Figures \@ref(fig:uchart) and \@ref(fig:upchart))
 
-...
+* I chart for measurement **averages without denominator**: diabetes avg_hba1c (Figure \@ref(fig:inodenomchart))
 
-### Measurement data with denominator
+* I chart for measurement **averages with denominator**: diabetes avg_hba1c / n (Figure \@ref(fig:idenomchart))
 
-...
+In the plots, the control limits from the original Shewhart charts are shown as a grey background with the limits from the I prime charts superimposed.
 
-### Count and measurement data without denominator
+### P and P prime charts for case proportions
+
+Figure \@ref(fig:pchart) is a P control chart of the proportion (percentage) of patients with bacteremia who died within 30 days after infection. The grey background represents the control limits from the original P chart, and the red lines represent the limits calculated using the the I prime chart algorithm. As seen the I prime limits are a bit wider. The difference is, for practical purposes, negligible.
+
+This observation aligns with our experience testing various datasets comparing Shewhart control charts (Xbar, P, C, and U) with I prime limits. While I prime limits are sometimes slightly wider or narrower than the original limits, the differences are rarely significant enough to affect the analysis conclusions.
+
+```{r pchart, fig.cap='P chart of proportion patients who died of bacteremia.<br>Grey background: control limits from original chart. Red lines: control limits from I prime chart'}
+compplot(bac$month, bac$deaths, bac$patients, 
+         chart = 'p',
+         title = NULL,
+         xlab = 'Month')
+```
+
+Figure \@ref(fig:ppchart) plots the same data as Figure \@ref(fig:pchart) but the control limits have been calculated using the P prime chart. As seen, the I prime limits match the P prime limits. This observation has also been confirmed with other datasets and with the U prime chart.
+
+```{r ppchart, fig.cap='P prime chart of proportion patients who died of bacteremia.'}
+compplot(bac$month, bac$deaths, bac$patients, 
+         chart = 'pp',
+         title = NULL,
+         xlab = 'Month')
+```
+
+### C and I charts for event counts
+
+```{r cchart, fig.cap='C charts of number of hospital infections'}
+compplot(bac$month, bac$ha_infections, 
+         chart = 'c',
+         title = NULL,
+         xlab = 'Month')
+```
+
+```{r icountchart, fig.cap='I charts of number of hospital infections'}
+compplot(bac$month, bac$ha_infections, 
+         chart = 'i',
+         title = NULL,
+         xlab = 'Month')
+```
+
+### U and U prime charts for event rates
+
+```{r uchart, fig.cap='U chart of infection rates'}
+compplot(bac$month, bac$ha_infections, bac$risk_days, 
+         chart = 'u', 
+         multiply = 10000,
+         title = NULL,
+         ylab = 'Infections per 10,000 risk days',
+         xlab = 'Month')
+```
+
+```{r upchart, fig.cap='U prime chart of infection rates'}
+compplot(bac$month, bac$ha_infections, bac$risk_days,
+         chart = 'up',
+         multiply = 10000,
+         title = NULL,
+         ylab = 'Infections per 10,000 risk days',
+         xlab = 'Month')
+```
+
+### I chart for measurement averages without denominator
+
+```{r inodenomchart, fig.cap='I chart of average HbA1c measurements without numerator'}
+compplot(hba1c$month, hba1c$avg_hba1c,
+         chart = 'i',
+         title = NULL,
+         ylab = 'Average HbA1c (mmol / mol)',
+         xlab = 'Month')
+```
+
+### I chart for measurement averages with denominator
+
+```{r idenomchart, fig.cap='I chart of average HbA1c measurements with number of patients as numerator'}
+compplot(hba1c$month, hba1c$avg_hba1c * hba1c$n, hba1c$n,
+         chart = 'i',
+         title = NULL,
+         ylab = 'Average HbA1c (mmol / mol)',
+         xlab = 'Month')
+```
 
 ...
 
 ## Discussion and conclusion
 
-Preliminary findings and observations:
-
 * The I prime chart is a very close match for U and P prime charts and the original I chart.
 
-* The I prime chart is often a reasonable match for C, U, P, and Xbar charts.
+* The I prime chart is often a reasonable match for C, U, and P charts.
 
-* The I prime chart plots the ratios of numerator / denominator. If measurement data have been aggregated in advance and we want to plot the numerators rather than the ratios, we must multiply the numerator and the denominator before plotting.
+* For (agregated) measurement data, the I prime charts adjusts the control limits to the size of the denominator thus reflecting any variability in subgroup size.
 
-* With multiple measurements or counts per subgroup, the mean is plotted, which may not be what we want (e.g. C and S charts). Use the agg.fun argument to specify.
+<!-- * The I prime chart plots ratios (numerator / denominator). If measurement data have been averaged in advance and we want to plot the numerators rather than the ratios, we must multiply the numerator and the denominator before plotting. -->
 
-  - Results summary
-  - Strengths, limitations, etc.
-  - Keen to learn what others think of it ...?
-  - NB: Say something about run charts!
-  
-...
+<!-- * With multiple measurements or counts per subgroup, the mean is plotted, which may not be what we want (e.g. C and S charts). Use the agg.fun argument to specify. -->
 
-## Appendix: test cases with code
+* Results summary
+* Strengths, limitations, etc.
+* QUESTION: Can the I prime charts replace the classic Shewhart control charts?
+* Keen to learn what others think of it ...?
+* NB: Say something about run charts!
+* ...
+
+## Appendix 1: Data sets
+
+### Bacteremia data
+
+```{r tabbac, tab.cap='Bacteremia data set (se text for variable definitions)'}
+knitr::kable(bac)
+```
+
+### Diabetes HbA1c data
+
+```{r tabhba1c, tab.cap='Diabetes HbA1c data set (se text for variable definitions)'}
+knitr::kable(hba1c)
+```
+
+## Appendix 2: Supplementary plots
 
 ### Random normal data
 
@@ -169,25 +289,26 @@ compplot(x, y, n, 'up')
 ```{r}
 d <- read_csv('data/csection_delay.csv', comment = '#')
 compplot(d$month, d$delay, chart = 'xbar')
+compplot(d$month, d$delay, chart = 'i')
 ```
 
-### Diabetes HbA1c data
+<!-- ### Diabetes HbA1c data -->
 
-```{r}
-d <- read_csv('data/diabetes_hba1c.csv', comment = '#')
-compplot(d$month, d$hba1c, d$n, chart = 'i')        # WRONG!
-compplot(d$month, d$hba1c * d$n, d$n, chart = 'i')  # CORRECT!
-```
+<!-- ```{r} -->
+<!-- d <- read_csv('data/diabetes_hba1c.csv', comment = '#') -->
+<!-- compplot(d$month, d$avg_hba1c, chart = 'i') -->
+<!-- compplot(d$month, d$avg_hba1c, d$n, chart = 'i')        # WRONG! -->
+<!-- compplot(d$month, d$avg_hba1c * d$n, d$n, chart = 'i')  # CORRECT! -->
+<!-- ``` -->
 
+<!-- ### Bacteremia data -->
 
-### Bacteremia data
-
-```{r}
-d <- read_csv('data/bacteremia.csv', comment = '#')
-compplot(d$month, d$ha_infections, d$risk_days, chart = 'u')
-compplot(d$month, d$ha_infections, d$risk_days, chart = 'up')
-compplot(d$month, d$deaths, d$patients, chart = 'p')
-compplot(d$month, d$deaths, d$patients, chart = 'pp')
-
-```
-
+<!-- ```{r} -->
+<!-- d <- read_csv('data/bacteremia.csv', comment = '#') -->
+<!-- compplot(d$month, d$ha_infections, chart = 'c') -->
+<!-- compplot(d$month, d$ha_infections, chart = 'i') -->
+<!-- compplot(d$month, d$ha_infections, d$risk_days, multiply = 10000, chart = 'u') -->
+<!-- compplot(d$month, d$ha_infections, d$risk_days, multiply = 10000, chart = 'up') -->
+<!-- compplot(d$month, d$deaths, d$patients, chart = 'p') -->
+<!-- compplot(d$month, d$deaths, d$patients, chart = 'pp') -->
+<!-- ``` -->
