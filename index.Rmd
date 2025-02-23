@@ -119,7 +119,7 @@ compplot(bac$month, bac$deaths, bac$patients,
          xlab = 'Month')
 ```
 
-Figure \@ref(fig:ppchart) plots the same data as Figure \@ref(fig:pchart) but the control limits have been calculated using the P prime chart. As seen, the I prime limits match the P prime limits. This observation has also been confirmed with other datasets and with the U prime chart.
+Figure \@ref(fig:ppchart) plots the same data as Figure \@ref(fig:pchart) but the original control limits have been calculated using the P prime chart. As seen, the I prime limits match the P prime limits. This observation has also been confirmed with other datasets and with the U prime chart.
 
 ```{r ppchart, fig.cap='P prime chart of proportion patients who died of bacteremia.'}
 compplot(bac$month, bac$deaths, bac$patients, 
@@ -130,21 +130,29 @@ compplot(bac$month, bac$deaths, bac$patients,
 
 ### C and I charts for event counts
 
+The C chart control limits of monthly number of hospital associated bacteremias in figure \@ref(fig:cchart) is closely matched by the I prime chart limits. As noted above, we have found that also C and U charts generally are close -- although, not perfect -- matches to the I prime charts.
+
 ```{r cchart, fig.cap='C charts of number of hospital infections'}
 compplot(bac$month, bac$ha_infections, 
          chart = 'c',
          title = NULL,
+         ylab = 'Number of hospital infections',
          xlab = 'Month')
 ```
+
+When plotting the counts from Figure \@ref(fig:cchart) in an I charts the control limits (as expected) match perfectly with the I prime chart limits.
 
 ```{r icountchart, fig.cap='I charts of number of hospital infections'}
 compplot(bac$month, bac$ha_infections, 
          chart = 'i',
          title = NULL,
+         ylab = 'Number of hospital infections',
          xlab = 'Month')
 ```
 
 ### U and U prime charts for event rates
+
+When plotting event rates using U or U prime charts, we again find that the I prime chart limits closely (but not perfectly) matches those of the non-prime chart and perfectly matches the prime chart limits (Figures \@ref(fig:uchart) and \@ref(fig:upchart)).
 
 ```{r uchart, fig.cap='U chart of infection rates'}
 compplot(bac$month, bac$ha_infections, bac$risk_days, 
@@ -166,6 +174,8 @@ compplot(bac$month, bac$ha_infections, bac$risk_days,
 
 ### I chart for measurement averages without denominator
 
+The I prime chart may be used as a substitute for the original I chart for measurements as demonstrated in Figure \@ref(fig:inodenomchart), which plots the monthly average of multiple measurements of HbA1c in diabetic children.
+
 ```{r inodenomchart, fig.cap='I chart of average HbA1c measurements without numerator'}
 compplot(hba1c$month, hba1c$avg_hba1c,
          chart = 'i',
@@ -173,6 +183,8 @@ compplot(hba1c$month, hba1c$avg_hba1c,
          ylab = 'Average HbA1c (mmol / mol)',
          xlab = 'Month')
 ```
+
+However, when plotting measurement data that have already been aggregated (in this case, averages), the I chart does not account for variations in subgroup size. Note the one data point outside the control limits in April 2020. The I prime chart in Figure \@ref(fig:idenomchart) takes the subgroup size (number of patients) into account and adjust the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients (the denominator) seen during this month was relatively low (see Table \@ref(tab:tabhba1c)). This, in turn, caused a larger than usual common cause variation in measurements this month. So, the apparent special cause in Figure \@ref(fig:inodenomchart) is actually a common cause when the subgroup size is taken into account.
 
 ### I chart for measurement averages with denominator
 
@@ -183,8 +195,6 @@ compplot(hba1c$month, hba1c$avg_hba1c * hba1c$n, hba1c$n,
          ylab = 'Average HbA1c (mmol / mol)',
          xlab = 'Month')
 ```
-
-...
 
 ## Discussion and conclusion
 
