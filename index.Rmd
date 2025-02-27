@@ -27,7 +27,7 @@ library(tidyverse)
 bac <- read_csv('data/bacteremia.csv', comment = '#')
 hba1c <- read_csv('data/diabetes_hba1c.csv', comment = '#')
 
-# Function to plot control limits from the In chart on top of Shewhart chart ---
+# Function to plot control limits from the I' chart on top of Shewhart chart
 compplot <- function(x, y, n = NULL, chart, ...) {
   p1 <- qic(x, y, n, chart = chart, ...)
   p2 <- qic(x, y, n, chart = 'ip', ...)
@@ -47,6 +47,21 @@ compplot <- function(x, y, n = NULL, chart, ...) {
 ## Introduction
 
 Our aim in this paper is to introduce the I prime chart to healthcare practitioners and highlight its strengths and weakness.
+
+* Basic control chart theory: 
+    - common vs special cause variation; 
+    - compare the between subgroup variation with the within subgroup variation (sigma)
+    - signal special causes when the between subgroup variation exceeds expected (3 sigma) (think ANOVA for time series data).
+
+* Different control charts (to calculate sigma) for different data types.
+
+* Prime charts for count data with large denominators -- when theoretical sigma underestimates the actual within subgroup variation.
+
+* The I chart as a "Swiss army knife" for all data types -- sigma estimated using moving ranges (AMR) reflecting the observed variation in data rather than the theoretical variation based on assumptions about the distribution.
+
+* Limitations of the I chart (does not take subgroup size into account).
+
+* The case for the I prime chart.
 
 Research questions:
 
@@ -74,7 +89,7 @@ To demonstrate the use of I prime charts on aggregated measurement data with var
 
 To construct the control charts, we used the R package `qicharts2`, which contains functions for Shewhart control charts in addition to functions for prime charts for proportions and rates with large denominators and for the I prime chart.
 
-To study the performance of I prime charts on count data we used a dataset on bacteremia cases (Table \@ref(tab:tabbac)).
+To demonstrate the use of I prime charts on count data we used data on bacteremia cases (Table \@ref(tab:tabbac)).
 
 Data sets and R code are available from the GitHub repository (https://github.com/anhoej/i_prime_chart).
 
@@ -95,7 +110,7 @@ qic(month, avg_hba1c,
     xlab = 'Month')
 ```
 
-The I prime chart in Figure \@ref(fig:ipchart) takes the subgroup size (number of patients) into account and adjusts the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients (the denominator) seen during this month was significantly lower than usual, which allowed for larger common cause variation in measurements this month. So, when the subgroup size is taken into account, the apparent special cause in Figure \@ref(fig:ichart) is actually within the limits of the expected common cause variation.
+The I prime chart in Figure \@ref(fig:ipchart) takes the subgroup size (number of patients) into account and adjusts the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients (the denominator) seen during this month was significantly lower than usual, which allowed for larger than usual common cause variation in measurements and wider control limits this month. So, when the subgroup size is taken into account, the apparent special cause in Figure \@ref(fig:ichart) is actually within the limits of the expected common cause variation. Also, notice that the centre lines are a bit different (60.6 vs 60.3), because the I prime chart uses the weighted rather than the unweighted mean of the measurements.
 
 ```{r ipchart, fig.cap='I prime chart of average HbA1c with denominator'}
 qic(month, avg_hba1c * n, n, 
@@ -119,7 +134,7 @@ compplot(bac$month, bac$deaths, bac$patients,
          xlab = 'Month')
 ```
 
-This observation aligns with our experience testing various datasets comparing Shewhart control charts (Xbar, P, C, and U) with I prime limits. While the I prime limits are sometimes slightly wider or narrower than the original limits, the differences are rarely significant enough to affect the analysis conclusions.
+This observation aligns with our experience testing various datasets comparing Shewhart control charts (Xbar, P, C, and U) with I prime limits (see Appendix for examples). While the I prime limits are sometimes slightly wider or narrower than the original limits, the differences are rarely significant enough to affect the analysis conclusions.
 
 Figure \@ref(fig:ppchart) plots the same data as Figure \@ref(fig:pchart) but the original control limits have been calculated using the P prime chart.
 
@@ -154,18 +169,17 @@ compplot(bac$month, bac$ha_infections, bac$risk_days,
 
 * The I prime charts is an exact match for the original I chart.
 
-* For measurement and count data, the I prime charts adjusts the control limits to the size of the denominator thus reflecting any variability in subgroup size.
+* For measurement and count data, the I prime charts adjusts the control limits and the centre lines to the size of the denominator thus reflecting any variability in subgroup size.
 
 * The I prime chart is a very close match for U and P prime charts
 
 * The I prime chart is a reasonable match for Xbar, C, U, and P charts.
 
-* Are P and U prime charts always the best choice for count data (even with small denominators)? If so, I prime charts may be used for all types of count and measurement data.
+* Question: Are P and U prime charts always the best choice for count data (even with small denominators)? If so, I prime charts may be used for all types of count and measurement data.
 
 ...
 
 * Strengths, limitations, etc.
-* QUESTION: Can the I prime charts replace the classic Shewhart control charts?
 * Keen to learn what others think of it ...?
 * NB: Say something about run charts!
 * ...
@@ -199,66 +213,68 @@ knitr::kable(bac)
 
 ## Appendix: Supplementary plots
 
-### Random normal data
+### I and I prime charts from individual random normal measurements
 
-#### I chart
-
-```{r}
+```{r richart, fig.cap='I chart from 24 random data from a normal distribution without denominator.'}
 set.seed(1)                   # fixate random number generator
 x <- 1:24                     # subgroups
 y <- rnorm(24, 20, 3)         # numerators
 n <- runif(24, 80, 120)       # denominators
 
-compplot(x, y, chart = 'i')
+compplot(x, y, chart = 'i', title = NULL)
 ```
 
-```{r}
-compplot(x, y, n, chart = 'i') # WRONG!
+```{r ripchart, fig.cap='I prime chart from 24 random, normal data with denominator.'}
+compplot(x, y * n, n, chart = 'i', title = NULL)
 ```
 
-```{r}
-compplot(x, y * n, n, chart = 'i') # CORRECT!
-```
+### Xbar charts from multiple random normal measurements
 
-#### Xbar chart
-
-```{r}
+```{r rxbarchart1, fig.cap='Xbar chart from 24 subgroups of 10 to 20 random normal data. I prime limits a bit too wide.'}
 set.seed(1)
 x <- rep(1:24, round(runif(24, 10, 20)))
 y <- rnorm(length(x), 9)
-compplot(x, y, chart = 'xbar')
+compplot(x, y, chart = 'xbar', title = NULL)
+```
 
+```{r rxbarchart2, fig.cap='Xbar chart from 24 subgroups of 10 to 20 random normal data. I prime limits close to original limits.'}
 set.seed(6)
 x <- rep(1:24, round(runif(24, 10, 20)))
 y <- rnorm(length(x), 9)
-compplot(x, y, chart = 'xbar')
+compplot(x, y, chart = 'xbar', title = NULL)
+```
 
+```{r rxbarchart3, fig.cap='Xbar chart from 24 subgroups of 10 to 20 random normal data. I prime limits a bit too narrow'}
 set.seed(8)
 x <- rep(1:24, round(runif(24, 10, 20)))
 y <- rnorm(length(x), 9)
-compplot(x, y, chart = 'xbar')
+compplot(x, y, chart = 'xbar', title = NULL)
 ```
 
-### Random binomial data
+### P and P prime charts from random binomial data
 
-```{r}
+```{r rppchart, fig.cap='P chart of 24 random data from a binomial distribution.'}
 set.seed(1)
 x <- 1:24
 n <- round(runif(24, 100, 120))
 y <- rbinom(24, n, 0.1)
-compplot(x, y, n, 'p')
-compplot(x, y, n, 'pp')
+compplot(x, y, n, 'p', title = NULL)
 ```
 
-### Random poisson data
+```{r rpchart, fig.cap='P prime chart of 24 random data from a binomial distribution.'}
+compplot(x, y, n, 'pp', title = NULL)
+```
 
-```{r}
+### U and U prime charts from random poisson data
+
+```{r ruchart, fig.cap='U chart from 24 random data from a poisson distribution'}
 set.seed(1)
 x <- 1:24
 n <- (runif(24, 90, 110))
 y <- rpois(24, 25)
-compplot(x, y, n, chart = 'u')
-compplot(x, y, n, chart = 'up')
-
+compplot(x, y, n, chart = 'u', title = NULL)
 ```
 
+```{r rupchart, fig.cap='U prime chart from 24 random data from a poisson distribution.'}
+compplot(x, y, n, chart = 'up', title = NULL)
+```
