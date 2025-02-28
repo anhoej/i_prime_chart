@@ -49,8 +49,8 @@ compplot <- function(x, y, n = NULL, chart, ...) {
 Our aim in this paper is to introduce the I prime chart to healthcare practitioners and highlight its strengths and weakness.
 
 * Basic control chart theory: 
-    - common vs special cause variation; 
-    - compare the between subgroup variation with the within subgroup variation (sigma)
+    - common vs special cause variation.
+    - compare the between subgroup variation with the within subgroup variation (sigma).
     - signal special causes when the between subgroup variation exceeds expected (3 sigma) (think ANOVA for time series data).
 
 * Different control charts (to calculate sigma) for different data types.
@@ -59,9 +59,13 @@ Our aim in this paper is to introduce the I prime chart to healthcare practition
 
 * The I chart as a "Swiss army knife" for all data types -- sigma estimated using moving ranges (AMR) reflecting the observed variation in data rather than the theoretical variation based on assumptions about the distribution.
 
+* The formula for calculating I chart limits.
+
 * Limitations of the I chart (does not take subgroup size into account).
 
 * The case for the I prime chart.
+
+* The formula for calculating I prime chart limits.
 
 Research questions:
 
@@ -110,7 +114,7 @@ qic(month, avg_hba1c,
     xlab = 'Month')
 ```
 
-The I prime chart in Figure \@ref(fig:ipchart) takes the subgroup size (number of patients) into account and adjusts the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients (the denominator) seen during this month was significantly lower than usual, which allowed for larger than usual common cause variation in measurements and wider control limits this month. So, when the subgroup size is taken into account, the apparent special cause in Figure \@ref(fig:ichart) is actually within the limits of the expected common cause variation. Also, notice that the centre lines are a bit different (60.6 vs 60.3), because the I prime chart uses the weighted rather than the unweighted mean of the measurements.
+The I prime chart in Figure \@ref(fig:ipchart) takes the subgroup size (number of patients) into account and adjusts the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients (the denominator) seen during this month was significantly lower than usual, which allowed for larger than usual common cause variation in measurements and consequently wider control limits this month. So, when the subgroup size is taken into account, the apparent special cause in Figure \@ref(fig:ichart) is actually within the limits of the expected common cause variation. Also, notice that the centre lines are a bit different (60.6 vs 60.3), because the I prime chart uses the weighted rather than the unweighted mean of the measurements.
 
 ```{r ipchart, fig.cap='I prime chart of average HbA1c with denominator'}
 qic(month, avg_hba1c * n, n, 
@@ -123,7 +127,7 @@ qic(month, avg_hba1c * n, n,
 
 ### I prime chart vs P and U charts for count data
 
-In the following plots, the control limits from the original Shewhart charts are shown as a grey background with the limits from the I prime chart algorithm superimposed as red lines.
+In the following plots, the control limits from the I prime chart algorithm are superimposed as red lines on the original Shewhart charts.
 
 Figure \@ref(fig:pchart) is a P control chart of the percentage of patients with bacteremia from Table \@ref(tab:tabbac) who died within 30 days after infection. As seen, the I prime limits are (in this case) a bit wider. However, the difference is, for practical purposes, negligible.
 
@@ -145,7 +149,7 @@ compplot(bac$month, bac$deaths, bac$patients,
          xlab = 'Month')
 ```
 
-As seen (and expected from theory), the I prime limits match the P prime limits. This observation has been confirmed with other datasets and with the U and U prime chart of infection rates as demonstrated below (figures \@ref(fig:uchart) and \@ref(fig:upchart).
+As seen (and expected from theory), the I prime limits match the P prime limits. This observation has also been confirmed with other datasets and with the U and U prime chart of infection rates as demonstrated below (figures \@ref(fig:uchart) and \@ref(fig:upchart).
 
 ```{r uchart, fig.cap='U chart of infection rates'}
 compplot(bac$month, bac$ha_infections, bac$risk_days, 
@@ -181,11 +185,11 @@ compplot(bac$month, bac$ha_infections, bac$risk_days,
 
 * Discussion:
 
+    - There is no such thing as "true" control limits (except for synthetic data with known parameters), only "useful" limits exist. Shewhart's quote about "highbrow statistical theorems".
+
     - Are P and U prime charts always the best choice for count data (even with small denominators)? If so, I prime charts may be used for all types of count and measurement data.
 
-    - NB: no "true" control limits exists (except for synthetic data with known parameters), only "useful" limits exists. Shewhart quote about "highbrow statistical theorems".
-
-* Keen to learn what others think of it ...?
+* Keen to learn what others think of it.
 
 * NB: Say something about run charts!
 
@@ -202,7 +206,6 @@ compplot(bac$month, bac$ha_infections, bac$risk_days,
     - month (date): month of measurements
     - avg_hba1c (numeric): average of HbA1c measurements
     - n (integer): number of patients
-
 
 ```{r tabhba1c, tab.cap='Diabetes HbA1c data set.'}
 knitr::kable(hba1c)

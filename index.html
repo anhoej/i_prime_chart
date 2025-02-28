@@ -1469,7 +1469,7 @@ border-radius: 0px;
 <h3 class="subtitle">Can the I Prime Chart Replace Commonly Used Shewhart Control Charts?<br />
 <hr></h3>
 <h4 class="author">Anhøj &amp; Mohammed</h4>
-<h4 class="date">2025-02-27 WORK IN PROGRESS</h4>
+<h4 class="date">2025-02-28 WORK IN PROGRESS</h4>
 
 </div>
 
@@ -1485,15 +1485,17 @@ border-radius: 0px;
 <ul>
 <li><p>Basic control chart theory:</p>
 <ul>
-<li>common vs special cause variation;</li>
-<li>compare the between subgroup variation with the within subgroup variation (sigma)</li>
+<li>common vs special cause variation.</li>
+<li>compare the between subgroup variation with the within subgroup variation (sigma).</li>
 <li>signal special causes when the between subgroup variation exceeds expected (3 sigma) (think ANOVA for time series data).</li>
 </ul></li>
 <li><p>Different control charts (to calculate sigma) for different data types.</p></li>
 <li><p>Prime charts for count data with large denominators – when theoretical sigma underestimates the actual within subgroup variation.</p></li>
 <li><p>The I chart as a “Swiss army knife” for all data types – sigma estimated using moving ranges (AMR) reflecting the observed variation in data rather than the theoretical variation based on assumptions about the distribution.</p></li>
+<li><p>The formula for calculating I chart limits.</p></li>
 <li><p>Limitations of the I chart (does not take subgroup size into account).</p></li>
 <li><p>The case for the I prime chart.</p></li>
+<li><p>The formula for calculating I prime chart limits.</p></li>
 </ul>
 <p>Research questions:</p>
 <ul>
@@ -1735,7 +1737,7 @@ border-radius: 0px;
 Figure 1: I chart of average HbA1c without denominator
 </p>
 </div>
-<p>The I prime chart in Figure <a href="#fig:ipchart">2</a> takes the subgroup size (number of patients) into account and adjusts the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients (the denominator) seen during this month was significantly lower than usual, which allowed for larger than usual common cause variation in measurements and wider control limits this month. So, when the subgroup size is taken into account, the apparent special cause in Figure <a href="#fig:ichart">1</a> is actually within the limits of the expected common cause variation. Also, notice that the centre lines are a bit different (60.6 vs 60.3), because the I prime chart uses the weighted rather than the unweighted mean of the measurements.</p>
+<p>The I prime chart in Figure <a href="#fig:ipchart">2</a> takes the subgroup size (number of patients) into account and adjusts the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients (the denominator) seen during this month was significantly lower than usual, which allowed for larger than usual common cause variation in measurements and consequently wider control limits this month. So, when the subgroup size is taken into account, the apparent special cause in Figure <a href="#fig:ichart">1</a> is actually within the limits of the expected common cause variation. Also, notice that the centre lines are a bit different (60.6 vs 60.3), because the I prime chart uses the weighted rather than the unweighted mean of the measurements.</p>
 <div class="figure"><span style="display:block;" id="fig:ipchart"></span>
 <svg id="svg_fe9f509ff5123b2b71c7" role="img" aria-label="I prime chart of average HbA1c with denominator" alt="I prime chart of average HbA1c with denominator" width="864" height="324" viewBox="0 0 648 324">
 <defs>
@@ -1959,7 +1961,7 @@ Figure 2: I prime chart of average HbA1c with denominator
 </div>
 <div id="i-prime-chart-vs-p-and-u-charts-for-count-data" class="section level3" number="4.2">
 <h3><span class="header-section-number">4.2</span> I prime chart vs P and U charts for count data</h3>
-<p>In the following plots, the control limits from the original Shewhart charts are shown as a grey background with the limits from the I prime chart algorithm superimposed as red lines.</p>
+<p>In the following plots, the control limits from the I prime chart algorithm are superimposed as red lines on the original Shewhart charts.</p>
 <p>Figure <a href="#fig:pchart">3</a> is a P control chart of the percentage of patients with bacteremia from Table <a href="#tab:tabbac">2</a> who died within 30 days after infection. As seen, the I prime limits are (in this case) a bit wider. However, the difference is, for practical purposes, negligible.</p>
 <div class="figure"><span style="display:block;" id="fig:pchart"></span>
 <svg id="svg_df9bb9a0b6acd90b6510" role="img" aria-label="P chart of proportion patients who died of bacteremia.&lt;br&gt;Grey background: control limits from original chart. Red lines: control limits from I prime chart" alt="P chart of proportion patients who died of bacteremia.&lt;br&gt;Grey background: control limits from original chart. Red lines: control limits from I prime chart" width="864" height="324" viewBox="0 0 648 324">
@@ -2395,7 +2397,7 @@ Figure 3: P chart of proportion patients who died of bacteremia.<br>Grey backgro
 Figure 4: P prime chart of proportion patients who died of bacteremia.
 </p>
 </div>
-<p>As seen (and expected from theory), the I prime limits match the P prime limits. This observation has been confirmed with other datasets and with the U and U prime chart of infection rates as demonstrated below (figures <a href="#fig:uchart">5</a> and <a href="#fig:upchart">6</a>.</p>
+<p>As seen (and expected from theory), the I prime limits match the P prime limits. This observation has also been confirmed with other datasets and with the U and U prime chart of infection rates as demonstrated below (figures <a href="#fig:uchart">5</a> and <a href="#fig:upchart">6</a>.</p>
 <div class="figure"><span style="display:block;" id="fig:uchart"></span>
 <svg id="svg_1753ef66cce911e10811" role="img" aria-label="U chart of infection rates" alt="U chart of infection rates" width="864" height="324" viewBox="0 0 648 324">
 <defs>
@@ -3029,10 +3031,10 @@ Figure 6: U prime chart of infection rates
 <li><p>Strengths, limitations, etc.</p></li>
 <li><p>Discussion:</p>
 <ul>
+<li><p>There is no such thing as “true” control limits (except for synthetic data with known parameters), only “useful” limits exist. Shewhart’s quote about “highbrow statistical theorems”.</p></li>
 <li><p>Are P and U prime charts always the best choice for count data (even with small denominators)? If so, I prime charts may be used for all types of count and measurement data.</p></li>
-<li><p>NB: no “true” control limits exists (except for synthetic data with known parameters), only “useful” limits exists. Shewhart quote about “highbrow statistical theorems”.</p></li>
 </ul></li>
-<li><p>Keen to learn what others think of it …?</p></li>
+<li><p>Keen to learn what others think of it.</p></li>
 <li><p>NB: Say something about run charts!</p></li>
 <li><p>Conclusion:</p>
 <ul>
