@@ -1,7 +1,7 @@
 ---
 title: "One Chart to Rule Them All?"
 subtitle: "Can the I Prime Chart Replace Commonly Used Shewhart Control Charts? <hr>"
-author: "Anhøj & Mohammed"
+author: "Jacob Anhøj & Mohammed Amin Mohammed"
 date: "`r Sys.Date()` WORK IN PROGRESS"
 output: 
   bookdown::html_document2:
@@ -53,9 +53,9 @@ Our aim in this paper is to introduce the I prime chart to healthcare practition
     - compare the between subgroup variation with the within subgroup variation (sigma).
     - signal special causes when the between subgroup variation exceeds expected (3 sigma) (think ANOVA for time series data).
 
-* Different control charts (to calculate sigma) for different data types.
+* Different control charts (to calculate sigma) for different data types based on *assumed* theoretical data distributions.
 
-* Prime charts for count data with large denominators -- when theoretical sigma underestimates the actual within subgroup variation.
+* The case for prime charts when assumptions meet reality.
 
 * The I chart as a "Swiss army knife" for all data types -- sigma estimated using moving ranges (AMR) reflecting the observed variation in data rather than the theoretical variation based on assumptions about the distribution.
 
