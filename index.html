@@ -1469,7 +1469,7 @@ border-radius: 0px;
 <h3 class="subtitle">Can the I Prime Chart Replace Commonly Used Shewhart Control Charts?<br />
 <hr></h3>
 <h4 class="author">Jacob Anhøj &amp; Mohammed Amin Mohammed</h4>
-<h4 class="date">2025-03-04 WORK IN PROGRESS</h4>
+<h4 class="date">2025-03-20 WORK IN PROGRESS</h4>
 
 </div>
 
@@ -1490,12 +1490,11 @@ border-radius: 0px;
 <li>signal special causes when the between subgroup variation exceeds expected (3 sigma) (think ANOVA for time series data).</li>
 </ul></li>
 <li><p>Different control charts (to calculate sigma) for different data types based on <em>assumed</em> theoretical data distributions.</p></li>
-<li><p>The case for prime charts when assumptions meet reality.</p></li>
-<li><p>The I chart as a “Swiss army knife” for all data types – sigma estimated using moving ranges (AMR) reflecting the observed variation in data rather than the theoretical variation based on assumptions about the distribution.</p></li>
-<li><p>The formula for calculating I chart limits.</p></li>
+<li><p>The I chart as a “Swiss army knife” for all data types – sigma estimated using the observed variation in data rather than the theoretical variation based on assumptions about the distribution.</p></li>
+<li><p>The procedure for calculating I chart limits (<span class="math inline">\(CL \pm 2.66\overline{MR}\)</span>).</p></li>
 <li><p>Limitations of the I chart (does not take subgroup size into account).</p></li>
 <li><p>The case for the I prime chart.</p></li>
-<li><p>The formula for calculating I prime chart limits.</p></li>
+<li><p>The procedure for calculating I prime chart limits.</p></li>
 </ul>
 <p>Research questions:</p>
 <ul>
@@ -1503,20 +1502,52 @@ border-radius: 0px;
 <li><p>Does the I chart adjust appropriately for varying subgroup sizes in measurement data with denominator?</p></li>
 <li><p>Is the I prime chart a useful substitute for other Shewhart control charts?</p></li>
 </ul>
-<hr />
-<p>Statistical Process Control (SPC) is a widely adopted methodology in healthcare to support quality improvement initiatives. A critical technical challenge in applying SPC is the selection of appropriate control charts, as the choice depends on the type of data being analysed. For continuous (or measurement) data collected one at a time – such as a patient’s daily blood pressure – the I chart (individuals chart) is the most suitable option. Conversely, for attribute (or count) data – such as the number of patients admitted to a hospital – the standard suite of SPC charts, including the P, U, and C charts, are typically recommended.</p>
-<p>However, a point of contention arises when dealing with count data that is expressed as a ratio (e.g., percentage of mortality after surgery). Some practitioners advocate for the use of the I chart in such cases, despite its limitations. The I chart is designed to account for variation between subgroups and does consider variation within subgroups, which is a key feature of the standard attribute charts. This limitation makes the I chart a controversial choice for ratio-based count data, as real-world processes often exhibit within-subgroup and between-subgroup variation, both of which should be accommodated for accurate analysis.</p>
-<p>Recent advancements have extended the capabilities of the I chart to handle both measurement data and count data with denominators. This improved I chart (which we call the I prime or I&#39; chart) now offers a more robust solution for analysing processes with inherent variability, making it a valuable tool for healthcare quality improvement efforts. This paper provides a tutorial review of this enhanced I chart, highlighting its applications and advantages in healthcare settings.</p>
+<!-- Statistical Process Control (SPC) is a widely adopted methodology in healthcare to support quality improvement initiatives. A critical technical challenge in applying SPC is the selection of appropriate control charts, as the choice depends on the type of data being analysed. For continuous (or measurement) data collected one at a time -- such as a patient’s daily blood pressure -- the I chart (individuals chart) is the most suitable option. Conversely, for attribute (or count) data -- such as the number of patients admitted to a hospital -- the standard suite of SPC charts, including the P, U, and C charts, are typically recommended. -->
+<!-- However, a point of contention arises when dealing with count data that is expressed as a ratio (e.g., percentage of mortality after surgery). Some practitioners advocate for the use of the I chart in such cases, despite its limitations. The I chart is designed to account for variation between subgroups and does consider variation within subgroups, which is a key feature of the standard attribute charts. This limitation makes the I chart a controversial choice for ratio-based count data, as real-world processes often exhibit within-subgroup and between-subgroup variation, both of which should be accommodated for accurate analysis. -->
+<!-- Recent advancements have extended the capabilities of the I chart to handle both measurement data and count data with denominators. This improved I chart (which we call the I prime or I\' chart) now offers a more robust solution for analysing processes with inherent variability, making it a valuable tool for healthcare quality improvement efforts. This paper provides a tutorial review of this enhanced I chart, highlighting its applications and advantages in healthcare settings. -->
 <hr />
 <p>…</p>
 </div>
 <div id="materials-and-methods" class="section level2" number="3">
 <h2><span class="header-section-number">3</span> Materials and methods</h2>
+<div id="procedure-for-calculating-centre-line-and-control-limits" class="section level3" number="3.1">
+<h3><span class="header-section-number">3.1</span> Procedure for calculating centre line and control limits</h3>
+<p>We use the following symbols:</p>
+<ul>
+<li>n = numerators</li>
+<li>d = denominators</li>
+<li>o = number of data values</li>
+<li>i = i<sup>th</sup> data value</li>
+</ul>
+<p>Values to plot:</p>
+<p><span class="math display">\[
+y = \frac{n}{d}
+\]</span></p>
+<p>Centre line:</p>
+<p><span class="math display">\[
+CL = \frac{\sum{n}}{\sum{d}}
+\]</span></p>
+<p>Standard deviation of i<sup>th</sup> data point:</p>
+<p><span class="math display">\[
+s_i = \sqrt{\frac{\pi}{2}}\frac{\vert{}y_i-y_{i-1}\vert{}}{\sqrt{\frac{1}{d_i}+\frac{1}{d_{i-1}}}}
+\]</span></p>
+<p>Average standard deviation:</p>
+<p><span class="math display">\[
+\bar{s} = \frac{\sum{s}}{o}
+\]</span></p>
+<p>Control limits:</p>
+<p><span class="math display">\[
+\text{control limits} = CL \pm 3 \frac{\bar{s}}{\sqrt{d_i}}
+\]</span></p>
+</div>
+<div id="data-sets" class="section level3" number="3.2">
+<h3><span class="header-section-number">3.2</span> Data sets</h3>
 <p>To demonstrate the use of I prime charts on aggregated measurement data with varying subgroup sizes (denominators) we used data from a regional outpatient clinic for children with diabetes. For privacy purposes, data were aggregated in advance including the monthly number of children who visited the clinic and their average glycated haemoglobin (HbA1c, a measure of long term blood glucose levels). Date are presented in Table <a href="#tab:tabhba1c">1</a>.</p>
 <p>To construct the control charts, we used the R package <code>qicharts2</code>, which contains functions for Shewhart control charts in addition to functions for prime charts for proportions and rates with large denominators and for the I prime chart.</p>
 <p>To demonstrate the use of I prime charts on count data we used data on bacteremia cases (Table <a href="#tab:tabbac">2</a>).</p>
 <p>Data sets and R code are available from the GitHub repository (<a href="https://github.com/anhoej/i_prime_chart" class="uri">https://github.com/anhoej/i_prime_chart</a>).</p>
 <p>Additionally, we constructed a large number of I prime charts using both random data from normal, binomial, and poisson distributions and several other data sets from clinical practice. See the appendix for examples of additional plots.</p>
+</div>
 </div>
 <div id="results" class="section level2" number="4">
 <h2><span class="header-section-number">4</span> Results</h2>
@@ -3042,7 +3073,7 @@ Figure 6: U prime chart of infection rates
 </ul></li>
 </ul>
 </div>
-<div id="data-sets" class="section level2" number="6">
+<div id="data-sets-1" class="section level2" number="6">
 <h2><span class="header-section-number">6</span> Data sets</h2>
 <div id="diabetes-hba1c-data" class="section level3" number="6.1">
 <h3><span class="header-section-number">6.1</span> Diabetes HbA1c data</h3>
