@@ -1469,7 +1469,7 @@ border-radius: 0px;
 <h3 class="subtitle">Can the I Prime Chart Replace Commonly Used Shewhart Control Charts?<br />
 <hr></h3>
 <h4 class="author">Jacob Anhøj &amp; Mohammed Amin Mohammed</h4>
-<h4 class="date">2025-04-03 WORK IN PROGRESS</h4>
+<h4 class="date">2025-05-10 WORK IN PROGRESS</h4>
 
 </div>
 
@@ -1481,42 +1481,59 @@ border-radius: 0px;
 </div>
 <div id="introduction" class="section level2" number="2">
 <h2><span class="header-section-number">2</span> Introduction</h2>
-<p>Our aim in this paper is to introduce the I prime chart to healthcare practitioners and highlight its strengths and weakness.</p>
-<ul>
-<li><p>Basic control chart theory:</p>
-<ul>
-<li>common vs special cause variation.</li>
-<li>compare the between subgroup variation with the within subgroup variation (sigma).</li>
-<li>signal special causes when the between subgroup variation exceeds expected (3 sigma) (think ANOVA for time series data).</li>
-</ul></li>
-<li><p>Different control charts (to calculate sigma) for different data types based on <em>assumed</em> theoretical data distributions.</p></li>
-<li><p>The I chart as a “Swiss army knife” for all data types – sigma estimated using the observed variation in data rather than the theoretical variation based on assumptions about the distribution.</p></li>
-<li><p>The procedure for calculating I chart limits (<span class="math inline">\(CL \pm 2.66\overline{MR}\)</span>).</p></li>
-<li><p>Limitations of the I chart (does not take subgroup size into account).</p></li>
-<li><p>The case for the I prime chart.</p></li>
-<li><p>The procedure for calculating I prime chart limits.</p></li>
-</ul>
-<p>Research questions:</p>
-<ul>
-<li><p>Does the I prime chart match the original I chart for measurement data without denominator?</p></li>
-<li><p>Does the I chart adjust appropriately for varying subgroup sizes in measurement data with denominator?</p></li>
-<li><p>Is the I prime chart a useful substitute for other Shewhart control charts?</p></li>
-</ul>
-<!-- Statistical Process Control (SPC) is a widely adopted methodology in healthcare to support quality improvement initiatives. A critical technical challenge in applying SPC is the selection of appropriate control charts, as the choice depends on the type of data being analysed. For continuous (or measurement) data collected one at a time -- such as a patient’s daily blood pressure -- the I chart (individuals chart) is the most suitable option. Conversely, for attribute (or count) data -- such as the number of patients admitted to a hospital -- the standard suite of SPC charts, including the P, U, and C charts, are typically recommended. -->
-<!-- However, a point of contention arises when dealing with count data that is expressed as a ratio (e.g., percentage of mortality after surgery). Some practitioners advocate for the use of the I chart in such cases, despite its limitations. The I chart is designed to account for variation between subgroups and does consider variation within subgroups, which is a key feature of the standard attribute charts. This limitation makes the I chart a controversial choice for ratio-based count data, as real-world processes often exhibit within-subgroup and between-subgroup variation, both of which should be accommodated for accurate analysis. -->
-<!-- Recent advancements have extended the capabilities of the I chart to handle both measurement data and count data with denominators. This improved I chart (which we call the I prime or I\' chart) now offers a more robust solution for analysing processes with inherent variability, making it a valuable tool for healthcare quality improvement efforts. This paper provides a tutorial review of this enhanced I chart, highlighting its applications and advantages in healthcare settings. -->
-<hr />
-<p>…</p>
+<!-- Our aim in this paper is to introduce the I prime chart to healthcare practitioners and highlight its strengths and weakness. -->
+<!-- * Basic control chart theory:  -->
+<!--     - common vs special cause variation. -->
+<!--     - compare the between subgroup variation with the within subgroup variation (sigma). -->
+<!--     - signal special causes when the between subgroup variation exceeds expected (3 sigma) (think ANOVA for time series data). -->
+<!-- * Different control charts (to calculate sigma) for different data types based on *assumed* theoretical data distributions. -->
+<!-- * The I chart as a "Swiss army knife" for all data types -- sigma estimated using the observed variation in data rather than the theoretical variation based on assumptions about the distribution. -->
+<!-- * The procedure for calculating I chart limits ($CL \pm 2.66\overline{MR}$). -->
+<!-- * Limitations of the I chart (does not take subgroup size into account). -->
+<!-- * The case for the I prime chart. -->
+<!-- * The procedure for calculating I prime chart limits. -->
+<!-- Research questions: -->
+<!-- * Does the I prime chart match the original I chart for measurement data without denominator? -->
+<!-- * Does the I chart adjust appropriately for varying subgroup sizes in measurement data with denominator? -->
+<!-- * Is the I prime chart a useful substitute for other Shewhart control charts? -->
+<p>Statistical Process Control (SPC) is widely used in healthcare to monitor and improve the quality and safety of care delivery processes [ref]. At its core, SPC methodology distinguishes between two types of variation: common cause variation, which reflects inherent fluctuations within a stable process and special cause variation, which signals a change in the underlying process due to an assignable cause.</p>
+<p>SPC charts help users visualise the behaviour of data from a process and identify signals of special cause variation using statistically defined control limits.</p>
+<p>There are scores of SPC charts and choosing the appropriate chart can be less than straightforward, especially in healthcare, where data structures are often complex and varied. Measurement data, counts, proportions, and rates with changing denominators are all common – each requiring a different type of control chart.</p>
+<p>Compounding this challenge is the fact that some practitioners lack formal statistical training, and software defaults often promote the use of a single chart type, typically the Individuals (I-)chart, regardless of whether it is the most appropriate. These issues can lead to the misapplication of SPC charts, generating misleading signals and undermining improvement efforts.</p>
+<p>Among SPC charts, the I-chart is especially popular for its simplicity and flexibility. It was originally developed for settings where data are collected as single measurements over time – for example, daily blood pressure readings or individual lab test turnaround times – but have proven useful also for count data like complication rates or procedure compliance. For this reason, the I chart is often referred to as the Swiss Army Knife of SPC [ref (Wheeler)].</p>
+<p>Unlike other SPC charts, the I-chart estimates process variation directly from the moving ranges between successive data points [ref] because the data are individual data points (subgroup size = 1). So the I-chart operates under a key assumption: that each data point reflects the same underlying area of opportunity – for example, comparable patient volumes, observation periods, or sample sizes.</p>
+<p>In many healthcare contexts, this assumption does not hold. For instance, the percentage of patients with post-surgical complications depends on the number of patients who underwent surgery (the denominator), which varies over time. When such variation in denominators or subgroup sizes exists, the use of the I-chart becomes problematic, because the I-chart assumes a constant denominator or area of opportunity. This assumption can lead to misleading control limits, and this is why the use of the I-chart for such data remains controversial.</p>
+<p>To address this limitation, Taylor recently proposed the normalised I-chart or the I-prime (I’-chart), a modified version of the I-chart, that accommodates varying denominators or subgroup sizes [ref].</p>
+<p>In this paper, we introduce the I’-chart, outline its theoretical foundation and evaluate its performance using a range of healthcare data sets. Our paper is guided by the following practical questions:</p>
+<ol style="list-style-type: decimal">
+<li><p>How does the I’-chart compare with the I-chart?</p></li>
+<li><p>How does the I’-chart accommodate varying sample sizes or denominators?</p></li>
+<li><p>How does the I’-chart compare with other widely used SPC charts (P, C, U, and Xbar charts)?</p></li>
+</ol>
 </div>
 <div id="materials-and-methods" class="section level2" number="3">
 <h2><span class="header-section-number">3</span> Materials and methods</h2>
 <div id="procedure-for-calculating-centre-line-and-control-limits" class="section level3" number="3.1">
 <h3><span class="header-section-number">3.1</span> Procedure for calculating centre line and control limits</h3>
-<p>We use the following symbols:</p>
+<p>The general formula for calculating control limits for SPC charts is:</p>
+<p><span class="math display">\[
+\text{control limits} = CL\pm3SD
+\]</span></p>
+<p>where CL is the centre line (usually the average), and SD is the standard variation of the common cause variation. The calculation of SD depends on the type of data involved.</p>
+<p>In particular, SD for the I-chart is calculated using:</p>
+<p><span class="math display">\[
+SD = \frac{\overline{MR}}{1.128}
+\]</span></p>
+<p>where <span class="math inline">\(\overline{MR}\)</span> is the average moving range, that is the average of the absolute differences between successive data points.</p>
+<p>The control limits are then calculated using:</p>
+<p><span class="math display">\[
+CL\pm2.66\overline{MR}
+\]</span></p>
+<p>The procedure for calculating control limits for the I’ chart adjusts the moving ranges by a factor that depends on the subgroup sizes. We use the following symbols:</p>
 <ul>
 <li>n = numerators</li>
 <li>d = denominators</li>
-<li>o = number of data values</li>
+<li>o = number of data values (subgroups)</li>
 <li>i = i<sup>th</sup> data value</li>
 </ul>
 <p>Values to plot:</p>
@@ -1539,6 +1556,7 @@ s_i = \sqrt{\frac{\pi}{2}}\frac{\vert{}y_i-y_{i-1}\vert{}}{\sqrt{\frac{1}{d_i}+\
 <p><span class="math display">\[
 \text{control limits} = CL \pm 3 \frac{\bar{s}}{\sqrt{d_i}}
 \]</span></p>
+<p>Note that when subgroups are of size 1, the formula simplifies to that of the original I chart: <span class="math inline">\(CL\pm2.66\overline{MR}\)</span>.</p>
 </div>
 <div id="data-sets" class="section level3" number="3.2">
 <h3><span class="header-section-number">3.2</span> Data sets</h3>
@@ -2208,7 +2226,7 @@ Figure 3: P chart of proportion patients who died of bacteremia.<br>Grey backgro
 </p>
 </div>
 <p>This observation aligns with our experience testing various datasets comparing Shewhart control charts (Xbar, P, C, and U) with I prime limits (see Appendix for examples). While the I prime limits are sometimes slightly wider or narrower than the original limits, the differences are rarely significant enough to affect the analysis conclusions.</p>
-<p>Figure <a href="#fig:ppchart">4</a> plots the same data as Figure <a href="#fig:pchart">3</a> but the original control limits have been calculated using the P prime chart.</p>
+<p>Figure <a href="#fig:ppchart">4</a> plots the same data as Figure <a href="#fig:pchart">3</a> but the original control limits have been calculated using the procedure for P prime charts as suggested by Laney [ref].</p>
 <div class="figure"><span style="display:block;" id="fig:ppchart"></span>
 <svg id="svg_6096436091772b93634f" role="img" aria-label="P prime chart of proportion patients who died of bacteremia." alt="P prime chart of proportion patients who died of bacteremia." width="864" height="324" viewBox="0 0 648 324">
 <defs>
@@ -3051,27 +3069,34 @@ Figure 6: U prime chart of infection rates
 </div>
 <div id="discussion-and-conclusion" class="section level2" number="5">
 <h2><span class="header-section-number">5</span> Discussion and conclusion</h2>
-<ul>
-<li><p>Summary of findings:</p>
-<ul>
-<li><p>The I prime charts is an exact match for the original I chart.</p></li>
-<li><p>For measurement and count data, the I prime charts adjusts the control limits and the centre lines to the size of the denominator thus reflecting any variability in subgroup size.</p></li>
-<li><p>The I prime chart is a very close match for U and P prime charts</p></li>
-<li><p>The I prime chart is a reasonable match for Xbar, C, U, and P charts.</p></li>
-</ul></li>
-<li><p>Strengths, limitations, etc.</p></li>
-<li><p>Discussion:</p>
-<ul>
-<li><p>There is no such thing as “true” control limits (except for synthetic data with known parameters), only “useful” limits exist. Shewhart’s quote about “highbrow statistical theorems”.</p></li>
-<li><p>Are P and U prime charts always the best choice for count data (even with small denominators)? If so, I prime charts may be used for all types of count and measurement data.</p></li>
-</ul></li>
-<li><p>Keen to learn what others think of it.</p></li>
-<li><p>NB: Say something about run charts!</p></li>
-<li><p>Conclusion:</p>
-<ul>
-<li>…</li>
-</ul></li>
-</ul>
+<!-- * Summary of findings: -->
+<!--     - The I prime charts is an exact match for the original I chart. -->
+<!--     - For measurement and count data, the I prime charts adjusts the control limits and the centre lines to the size of the denominator thus reflecting any variability in subgroup size. -->
+<!--     - The I prime chart is a very close match for U and P prime charts -->
+<!--     - The I prime chart is a reasonable match for Xbar, C, U, and P charts. -->
+<!-- * Strengths, limitations, etc. -->
+<!-- * Discussion: -->
+<!--     - There is no such thing as "true" control limits (except for synthetic data with known parameters), only "useful" limits exist. Shewhart's quote about "highbrow statistical theorems". -->
+<!--     - Are P and U prime charts always the best choice for count data (even with small denominators)? If so, I prime charts may be used for all types of count and measurement data. -->
+<!-- * Keen to learn what others think of it. -->
+<!-- * NB: Say something about run charts! -->
+<!-- * Conclusion: -->
+<!--     - ... -->
+<p>We introduced and evaluated the performance and applicability of the I’-chart, a modified form of the traditional Individuals I-chart, designed to account for variation in subgroup sizes.</p>
+<p>We have three key findings:</p>
+<ol style="list-style-type: decimal">
+<li><p>We found that the I’-chart produces results that are an exact match to the original I-chart when applied to individual measurement data where there are no denominators (subgroup size = 1). This validates the I’-chart as a generalization rather than a replacement, ensuring continuity for users familiar with the original method.</p></li>
+<li><p>We found that the I’-chart closely approximates the behaviour of Laney’s prime charts (P’-chart and U’-charts), because they too consider within and between subgroup variation, and are recommended for analysing proportions and rates, especially when denominators are large.</p></li>
+<li><p>Additionally, while not an exact substitute, the I’-chart shows reasonable alignment with other popular SPC charts (X-bar, C-, U-, and P-charts). [is this because these traditional charts do not accommodate, both, within and between subgroup variation and the prime charts (Laneys and Taylors) do, hence the extent to divergence between the two approaches depends on the magnitude of the within/between subgroup variation.]</p></li>
+</ol>
+<p>A distinctive feature of the I’-chart is that it produces control limits that are “wavy” or undulating when denominators change over time. This visual representation offers added insight, making variability in data precision explicit and encouraging more insightful interpretation.</p>
+<p>In addition, for measurement and count data with varying denominators, the I’-chart adjusts the centre line (weighted average) and control limits in proportion to subgroup size. This makes it more sensitive and appropriate in real-world healthcare settings where case volume, exposure time, or other denominators often vary over time. By accounting for these differences, the I’-chart reduces the risk of false-signals.</p>
+<p>A key strength of the I’-chart is that it maintains the simplicity of the I-chart while offering a more context-sensitive representation of variation.</p>
+<p>One potential barrier to the adoption of the I’- chart is its more complex formulae compared to the standard I-chart. Calculating variable control limits that adjust for changing denominators involves additional statistical steps, which may be a barrier to practitioners accustomed to simpler SPC methods. However, this complexity is readily overcome with modern software tools, which can automate these calculations and present the results in user-friendly formats.</p>
+<p>As with other advanced analytic techniques in healthcare, once embedded in software, the additional complexity becomes largely invisible to end users – allowing them to benefit from more accurate and context-sensitive charts without increasing the technical burden.</p>
+<p>We recommend that SPC software incorporate the I’-chart but also make it easy for users to compare traditional SPC charts (e.g. I- and P-chart, etc) alongside the I’-chart (and other prime charts), because this side-by-side comparison of data using different SPC charts itself can also be insightful [ref].</p>
+<p>The I’-chart has superior design properties to the traditional I-chart and so merits broader use and evaluation. Our findings demonstrate that the I’-chart retains the simplicity and intuitive appeal of the I-chart whilst accommodating variation in denominators, making it suitable for both measurement and count data.</p>
+<p>We are keen to learn how others in the field perceive its value and whether it enhances their ability to monitor and improve processes using real-world healthcare data.</p>
 </div>
 <div id="data-sets-1" class="section level2" number="6">
 <h2><span class="header-section-number">6</span> Data sets</h2>
