@@ -1,13 +1,14 @@
 ---
 title: "One Chart to Rule Them All?"
 subtitle: "Can the I Prime Chart Replace Commonly Used Shewhart Control Charts? <hr>"
-author: "Jacob Anhøj & Mohammed Amin Mohammed"
+author: "Jacob Anhøj, Wayne Taylor & Mohammed Amin Mohammed"
 date: "`r Sys.Date()` WORK IN PROGRESS"
 output:
   bookdown::html_document2:
-  # html_document:
     toc: true
     toc_float: true
+bibliography: [references.bib, packages.bib]
+link-citations: true
 editor_options:
   chunk_output_type: console
 ---
@@ -73,7 +74,7 @@ compplot <- function(x, y, n = NULL, chart, ...) {
 
 <!-- * Is the I prime chart a useful substitute for other Shewhart control charts? -->
 
-Statistical Process Control (SPC) is widely used in healthcare to monitor and improve the quality and safety of care delivery processes [ref]. At its core, SPC methodology distinguishes between two types of variation: common cause variation, which reflects inherent fluctuations within a stable process and special cause variation, which signals a change in the underlying process due to an assignable cause.
+Statistical Process Control (SPC) is widely used in healthcare to monitor and improve the quality and safety of care delivery processes [@carey2002a;@carey2002b;@mohammed2008]. At its core, SPC methodology distinguishes between two types of variation: common cause variation, which reflects inherent fluctuations within a stable process and special cause variation, which signals a change in the underlying process due to an assignable cause.
 
 SPC charts help users visualise the behaviour of data from a process and identify signals of special cause variation using statistically defined control limits.
 
@@ -81,13 +82,13 @@ There are scores of SPC charts and choosing the appropriate chart can be less th
 
 Compounding this challenge is the fact that some practitioners lack formal statistical training, and software defaults often promote the use of a single chart type, typically the Individuals (I-)chart, regardless of whether it is the most appropriate. These issues can lead to the misapplication of SPC charts, generating misleading signals and undermining improvement efforts.
 
-Among SPC charts, the I-chart is especially popular for its simplicity and flexibility. It was originally developed for settings where data are collected as single measurements over time -- for example, daily blood pressure readings or individual lab test turnaround times -- but have proven useful also for count data like complication rates or procedure compliance. For this reason, the I chart is often referred to as the Swiss Army Knife of SPC [ref (Wheeler)].
+Among SPC charts, the I-chart is especially popular for its simplicity and flexibility. It was originally developed for settings where data are collected as single measurements over time -- for example, daily blood pressure readings or individual lab test turnaround times -- but have proven useful also for count data like complication rates or procedure compliance. For this reason, the I chart is often referred to as the Swiss Army Knife of SPC [@wheeler2000, 142].
 
-Unlike other SPC charts, the I-chart estimates process variation directly from the moving ranges between successive data points [ref] because the data are individual data points (subgroup size = 1). So the I-chart operates under a key assumption: that each data point reflects the same underlying area of opportunity -- for example, comparable patient volumes, observation periods, or sample sizes.
+Unlike other SPC charts, the I-chart estimates process variation directly from the moving ranges between successive data points [@nelson1982] because the data are individual data points (subgroup size = 1). So the I-chart operates under a key assumption: that each data point reflects the same underlying area of opportunity -- for example, comparable patient volumes, observation periods, or sample sizes.
 
 In many healthcare contexts, this assumption does not hold. For instance, the percentage of patients with post-surgical complications depends on the number of patients who underwent surgery (the denominator), which varies over time. When such variation in denominators or subgroup sizes exists, the use of the I-chart becomes problematic, because the I-chart assumes a constant denominator or area of opportunity. This assumption can lead to misleading control limits, and this is why the use of the I-chart for such data remains controversial.
 
-To address this limitation, Taylor recently proposed the normalised I-chart or the I-prime (I'-chart), a modified version of the I-chart, that accommodates varying denominators or subgroup sizes [ref].
+To address this limitation, Taylor recently proposed the normalised I-chart or the I-prime (I'-chart), a modified version of the I-chart, that accommodates varying denominators (or subgroup sizes) [@taylor2018].
 
 In this paper, we introduce the I'-chart, outline its theoretical foundation and evaluate its performance using a range of healthcare data sets. Our paper is guided by the following practical questions:
 
@@ -98,7 +99,6 @@ In this paper, we introduce the I'-chart, outline its theoretical foundation and
 1. How does the I'-chart compare with other widely used SPC charts (P, C, U, and Xbar charts)?
 
 ## Materials and methods
-
 
 ### Procedure for calculating centre line and control limits
 
@@ -161,13 +161,13 @@ $$
 \text{control limits} = CL \pm 3 \frac{\bar{s}}{\sqrt{d_i}}
 $$
 
-Note that when subgroups are of size 1, the formula simplifies to that of the original I chart: $CL\pm2.66\overline{MR}$.
+Note that when the denominator is 1, the formula simplifies to the standard I-chart form: $CL\pm2.66\overline{MR}$.
 
 ### Data sets
 
-To demonstrate the use of I prime charts on aggregated measurement data with varying subgroup sizes (denominators) we used data from a regional outpatient clinic for children with diabetes. For privacy purposes, data were aggregated in advance including the monthly number of children who visited the clinic and their average glycated haemoglobin (HbA1c, a measure of long term blood glucose levels). Date are presented in Table \@ref(tab:tabhba1c).
+To demonstrate the use of I prime charts on aggregated measurement data with varying subgroup sizes we used data from a regional outpatient clinic for children with diabetes. For privacy purposes, data were aggregated in advance including the monthly number of children who visited the clinic and their average glycated haemoglobin (HbA1c, a measure of long term blood glucose levels). Date are presented in Table \@ref(tab:tabhba1c).
 
-To construct the control charts, we used the R package `qicharts2`, which contains functions for Shewhart control charts in addition to functions for prime charts for proportions and rates with large denominators and for the I prime chart.
+To construct the control charts, we used R [@r-base] with qicharts2  [@qicharts2], which contains functions for Shewhart control charts in addition to functions for prime charts for proportions and rates with large denominators and for the I prime chart.
 
 To demonstrate the use of I prime charts on count data we used data on bacteremia cases (Table \@ref(tab:tabbac)).
 
@@ -207,7 +207,7 @@ In the following plots, the control limits from the I prime chart algorithm are 
 
 Figure \@ref(fig:pchart) is a P control chart of the percentage of patients with bacteremia from Table \@ref(tab:tabbac) who died within 30 days after infection. As seen, the I prime limits are (in this case) a bit wider. However, the difference is, for practical purposes, negligible.
 
-```{r pchart, fig.cap='P chart of proportion patients who died of bacteremia.<br>Grey background: control limits from original chart. Red lines: control limits from I prime chart'}
+```{r pchart, fig.cap='P chart of proportion patients who died of bacteremia. Grey background: control limits from original chart. Red lines: control limits from I prime chart'}
 compplot(bac$month, bac$deaths, bac$patients,
          chart = 'p',
          title = NULL,
@@ -216,7 +216,7 @@ compplot(bac$month, bac$deaths, bac$patients,
 
 This observation aligns with our experience testing various datasets comparing Shewhart control charts (Xbar, P, C, and U) with I prime limits (see Appendix for examples). While the I prime limits are sometimes slightly wider or narrower than the original limits, the differences are rarely significant enough to affect the analysis conclusions.
 
-Figure \@ref(fig:ppchart) plots the same data as Figure \@ref(fig:pchart) but the original control limits have been calculated using the procedure for P prime charts as suggested by Laney [ref].
+Figure \@ref(fig:ppchart) plots the same data as Figure \@ref(fig:pchart) but the original control limits have been calculated using the procedure for P prime charts as suggested by Laney [@laney2002; @mohammed2013].
 
 ```{r ppchart, fig.cap='P prime chart of proportion patients who died of bacteremia.'}
 compplot(bac$month, bac$deaths, bac$patients,
@@ -225,7 +225,7 @@ compplot(bac$month, bac$deaths, bac$patients,
          xlab = 'Month')
 ```
 
-As seen (and expected from theory), the I prime limits match the P prime limits. This observation has also been confirmed with other datasets and with the U and U prime chart of infection rates as demonstrated below (figures \@ref(fig:uchart) and \@ref(fig:upchart).
+As seen (and expected from theory), the I prime limits match the P prime limits. This observation has also been confirmed with other datasets and with the U and U prime chart of infection rates as demonstrated below (figures \@ref(fig:uchart) and \@ref(fig:upchart)).
 
 ```{r uchart, fig.cap='U chart of infection rates'}
 compplot(bac$month, bac$ha_infections, bac$risk_days,
@@ -277,15 +277,15 @@ We introduced and evaluated the performance and applicability of the I'-chart, a
 
 We have three key findings:
 
-1.  We found that the I'-chart produces results that are an exact match to the original I-chart when applied to individual measurement data where there are no denominators (subgroup size = 1). This validates the I'-chart as a generalization rather than a replacement, ensuring continuity for users familiar with the original method.
+1.  The I'-chart produces results that are an exact match to the original I-chart when applied to individual measurement data (subgroup size = 1). This validates the I'-chart as a generalization rather than a replacement, ensuring continuity for users familiar with the original method.
 
-1. We found that the I'-chart closely approximates the behaviour of Laney’s prime charts (P'-chart and U'-charts), because they too consider within and between subgroup variation, and are recommended for analysing proportions and rates, especially when denominators are large.
+1. The I'-chart closely approximates the behaviour of Laney’s prime charts (P'-chart and U'-charts), because they too consider within and between subgroup variation, and are recommended for analysing proportions and rates, especially when denominators are large.
 
-1. Additionally, while not an exact substitute, the I'-chart shows reasonable alignment with other popular SPC charts (X-bar, C-, U-, and P-charts). [is this because these traditional charts do not accommodate, both, within and between subgroup variation and the prime charts (Laneys and Taylors) do, hence the extent to divergence between the two approaches depends on the magnitude of the within/between subgroup variation.]
+1. Additionally, while not an exact substitute, the I'-chart shows reasonable alignment with other popular SPC charts (X-bar, C-, U-, and P-charts).
 
 A distinctive feature of the I'-chart is that it produces control limits that are "wavy" or undulating when denominators change over time. This visual representation offers added insight, making variability in data precision explicit and encouraging more insightful interpretation.
 
-In addition, for measurement and count data with varying denominators, the I'-chart adjusts the centre line (weighted average) and control limits in proportion to subgroup size. This makes it more sensitive and appropriate in real-world healthcare settings where case volume, exposure time, or other denominators often vary over time. By accounting for these differences, the I'-chart reduces the risk of false-signals.
+In addition, for measurement and count data with varying denominators, the I'-chart adjusts the centre line by using the weighted rather than the unweighted average for centre line. This makes it more sensitive and appropriate in real-world healthcare settings where case volume, exposure time, or other denominators often vary over time.
 
 A key strength of the I'-chart is that it maintains the simplicity of the I-chart while offering a more context-sensitive representation of variation. 
 
@@ -293,7 +293,7 @@ One potential barrier to the adoption of the I'- chart is its more complex formu
 
 As with other advanced analytic techniques in healthcare, once embedded in software, the additional complexity becomes largely invisible to end users -- allowing them to benefit from more accurate and context-sensitive charts without increasing the technical burden. 
 
-We recommend that SPC software incorporate the I'-chart but also make it easy for users to compare traditional SPC charts (e.g. I- and P-chart, etc) alongside the I'-chart (and other prime charts), because this side-by-side comparison of data using different SPC charts itself can also be insightful [ref].
+We recommend that SPC software incorporate the I'-chart and make it easy for users to compare traditional SPC charts (e.g. I- and P-charts, etc) alongside the I'-chart, because this side-by-side comparison of data using different SPC charts itself can also be insightful [@mohammed2013a].
 
 The I'-chart has superior design properties to the traditional I-chart and so merits broader use and evaluation. Our findings demonstrate that the I'-chart retains the simplicity and intuitive appeal of the I-chart whilst accommodating variation in denominators, making it suitable for both measurement and count data. 
 
@@ -392,3 +392,5 @@ compplot(x, y, n, chart = 'u', title = NULL)
 ```{r rupchart, fig.cap='U prime chart from 24 random data from a poisson distribution.'}
 compplot(x, y, n, chart = 'up', title = NULL)
 ```
+
+## References
