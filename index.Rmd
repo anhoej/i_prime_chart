@@ -241,6 +241,8 @@ We recommend that SPC software incorporate the I'-chart and make it easy for use
 
 The I'-chart has superior design properties to the traditional I-chart and so merits broader use and evaluation. Our findings demonstrate that the I'-chart retains the simplicity and intuitive appeal of the I-chart whilst accommodating variation in subgroup sizes, making it suitable for both measurement and count data. 
 
+Given the introduction of the improved I'-chart, which is specifically designed for subgrouped data, the continued default use of the traditional I-chart in such contexts is increasingly difficult to justify.
+
 We are keen to learn how others in the field perceive its value and whether it enhances their ability to monitor and improve processes using real-world healthcare data.
 
 ## Data sets
