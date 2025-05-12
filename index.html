@@ -1508,13 +1508,13 @@ border-radius: 0px;
 <p>Compounding this challenge is the fact that some practitioners lack formal statistical training, and software defaults often promote the use of a single chart type, typically the Individuals (I-)chart, regardless of whether it is the most appropriate. These issues can lead to the misapplication of SPC charts, generating misleading signals and undermining improvement efforts.</p>
 <p>Among SPC charts, the I-chart is especially popular for its simplicity and flexibility. It was originally developed for settings where data are collected as single measurements over time – for example, daily blood pressure readings or individual lab test turnaround times – but have proven useful also for count data like complication rates or procedure compliance. For this reason, the I-chart is often referred to as the Swiss Army Knife of SPC <span class="citation">(<a href="#ref-wheeler2000">Wheeler 2000, 142</a>)</span>.</p>
 <p>Unlike other SPC charts, the I-chart estimates process variation directly from the moving ranges between successive data points <span class="citation">(<a href="#ref-nelson1982">Nelson 1982</a>)</span> because the data are individual data points (subgroup size = 1). So the I-chart operates under a key assumption: that each data point reflects the same underlying area of opportunity – for example, comparable patient volumes, observation periods, or sample sizes.</p>
-<p>In many healthcare contexts, this assumption does not hold. For instance, the percentage of patients with post-surgical complications depends on the number of patients who underwent surgery (the denominator), which varies over time. When such variation in denominators or subgroup sizes exists, the use of the I-chart becomes problematic, because the I-chart assumes a constant denominator or area of opportunity. This assumption can lead to misleading control limits, and this is why the use of the I-chart for such data remains controversial.</p>
-<p>To address this limitation, Taylor recently proposed the normalised I-chart or the I-prime (I’-chart), a modified version of the I-chart, that accommodates varying denominators (or subgroup sizes) <span class="citation">(<a href="#ref-taylor2018">Taylor 2018</a>)</span>.</p>
+<p>In many healthcare contexts, this assumption does not hold. For instance, the percentage of patients with post-surgical complications depends on the number of patients who underwent surgery (the denominator), which varies over time. When such variation in subgroup sizes exists, the use of the I-chart becomes problematic, because the I-chart assumes a constant subgroup size or area of opportunity. This assumption can lead to misleading control limits, and this is why the use of the I-chart for such data remains controversial.</p>
+<p>To address this limitation, Taylor recently proposed the normalised I-chart or the I’-chart (pronounced: I-prime chart), a modified version of the I-chart, that accommodates varying subgroup sizes <span class="citation">(<a href="#ref-taylor2018">Taylor 2018</a>)</span>.</p>
 <p>In this paper, we introduce the I’-chart, outline its theoretical foundation and evaluate its performance using a range of healthcare data sets. Our paper is guided by the following practical questions:</p>
 <ol style="list-style-type: lower-alpha">
-<li><p>How does the I’-chart compare with the I-chartfor subgroup sizes = 1?</p></li>
+<li><p>How does the I’-chart compare with the I-chart for subgroup sizes = 1?</p></li>
 <li><p>How does the I’-chart accommodate varying subgroup sizes?</p></li>
-<li><p>How does the I’-chart compare with other widely used SPC charts (P, C, U, and Xbar charts)?</p></li>
+<li><p>How does the I’-chart compare with other widely used SPC charts (P, C, U, and X-bar charts)?</p></li>
 </ol>
 </div>
 <div id="materials-and-methods" class="section level2" number="3">
@@ -1538,8 +1538,8 @@ CL\pm2.66\overline{MR}
 <p>The procedure for calculating control limits for the I’-chart adjusts the moving ranges by a factor that depends on the subgroup sizes. We use the following symbols:</p>
 <ul>
 <li>n = numerators</li>
-<li>d = denominators</li>
-<li>o = number of data values (subgroups)</li>
+<li>d = denominators (subgroup sizes)</li>
+<li>o = number of subgroups</li>
 <li>i = i<sup>th</sup> data value</li>
 </ul>
 <p>Values to plot:</p>
@@ -1566,20 +1566,20 @@ s_i = \sqrt{\frac{\pi}{2}}\frac{\vert{}y_i-y_{i-1}\vert{}}{\sqrt{\frac{1}{d_i}+\
 </div>
 <div id="data-sets" class="section level3" number="3.2">
 <h3><span class="header-section-number">3.2</span> Data sets</h3>
-<p>To demonstrate the use of I’ charts on aggregated measurement data with varying subgroup sizes we used data from a regional outpatient clinic for children with diabetes. For privacy purposes, data were aggregated in advance including the monthly number of children who visited the clinic and their average glycated haemoglobin (HbA1c, a measure of long term blood glucose levels). Date are presented in Table <a href="#tab:tabhba1c">1</a>.</p>
+<p>To demonstrate the use of I’-prime charts on aggregated measurement data with varying subgroup sizes we used data from a regional outpatient clinic for children with diabetes. For privacy purposes, data were aggregated in advance including the monthly number of children who visited the clinic and their average glycated haemoglobin (HbA1c, a measure of long term blood glucose levels). Date are presented in Table <a href="#tab:tabhba1c">1</a>.</p>
 <p>To construct the control charts, we used R <span class="citation">(<a href="#ref-r-base">R Core Team 2024</a>)</span> with qicharts2 <span class="citation">(<a href="#ref-qicharts2">Anhøj 2024</a>)</span>, which contains functions for Shewhart control charts in addition to functions for prime charts for proportions and rates with large denominators and for the I’-chart.</p>
-<p>To demonstrate the use of I’-charts on count data we used data on bacteremia cases (Table <a href="#tab:tabbac">2</a>).</p>
+<p>To demonstrate the use of I’-prime charts on count data we used data on bacteremia cases (Table <a href="#tab:tabbac">2</a>).</p>
 <p>Data sets and R code are available from the GitHub repository (<a href="https://github.com/anhoej/i_prime_chart" class="uri">https://github.com/anhoej/i_prime_chart</a>).</p>
-<p>Additionally, we constructed a large number of I’-charts using both random data from normal, binomial, and poisson distributions and several other data sets from clinical practice. See the appendix for examples of additional plots.</p>
+<p>Additionally, we constructed a large number of I’-prime charts using both random data from normal, binomial, and poisson distributions and several other data sets from clinical practice. See the appendix for examples of additional plots.</p>
 </div>
 </div>
 <div id="results" class="section level2" number="4">
 <h2><span class="header-section-number">4</span> Results</h2>
-<div id="i-chart-for-measurement-data-with-denominator" class="section level3" number="4.1">
-<h3><span class="header-section-number">4.1</span> I’-chart for measurement data with denominator</h3>
+<div id="i-prime-chart-for-measurement-data-with-denominator" class="section level3" number="4.1">
+<h3><span class="header-section-number">4.1</span> I’-prime chart for measurement data with denominator</h3>
 <p>Figure <a href="#fig:ichart">1</a> is an I-chart of the monthly HbA1c averages from Table <a href="#tab:tabhba1c">1</a>. Notice the data point above the upper control limit in April 2020 suggesting a special cause. However, when plotting aggregated measurement data, the I-chart does not account for variations in subgroup size.</p>
 <div class="figure"><span style="display:block;" id="fig:ichart"></span>
-<svg id="svg_030739aaddb720e425f9" role="img" aria-label="I-chart of average HbA1c without denominator" alt="I-chart of average HbA1c without denominator" width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_030739aaddb720e425f9" role="img" aria-label="I-chart of average HbA1c without denominator." alt="I-chart of average HbA1c without denominator." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_030739aaddb720e425f9_glyph-0-0">
@@ -1789,12 +1789,12 @@ s_i = \sqrt{\frac{\pi}{2}}\frac{\vert{}y_i-y_{i-1}\vert{}}{\sqrt{\frac{1}{d_i}+\
 </g>
 </svg>
 <p class="caption">
-Figure 1: I-chart of average HbA1c without denominator
+Figure 1: I-chart of average HbA1c without denominator.
 </p>
 </div>
-<p>The I’-chart in Figure <a href="#fig:ipchart">2</a> takes the subgroup size (number of patients) into account and adjusts the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients (the denominator) seen during this month was significantly lower than usual, which allowed for larger than usual common cause variation in measurements and consequently wider control limits this month. So, when the subgroup size is taken into account, the apparent special cause in Figure <a href="#fig:ichart">1</a> is actually within the limits of the expected common cause variation. Also, notice that the centre lines are a bit different (60.6 vs 60.3), because the I’-chart uses the weighted rather than the unweighted mean of the measurements.</p>
+<p>The I’-prime chart in Figure <a href="#fig:ipchart">2</a> takes the subgroup size (number of patients) into account and adjusts the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients seen during this month was significantly lower than usual, which allowed for larger than usual common cause variation in measurements and consequently wider control limits this month. So, when the subgroup size is taken into account, the apparent special cause in Figure <a href="#fig:ichart">1</a> is actually within the limits of the expected common cause variation. Also, notice that the centre lines are a bit different (60.6 vs 60.3), because the I’-prime chart uses the weighted rather than the unweighted mean of the averages.</p>
 <div class="figure"><span style="display:block;" id="fig:ipchart"></span>
-<svg id="svg_fe9f509ff5123b2b71c7" role="img" aria-label="I&#39;-chart of average HbA1c with denominator" alt="I&#39;-chart of average HbA1c with denominator" width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_fe9f509ff5123b2b71c7" role="img" aria-label="I&#39;-prime chart of average HbA1c with denominator." alt="I&#39;-prime chart of average HbA1c with denominator." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_fe9f509ff5123b2b71c7_glyph-0-0">
@@ -2010,16 +2010,16 @@ Figure 1: I-chart of average HbA1c without denominator
 </g>
 </svg>
 <p class="caption">
-Figure 2: I’-chart of average HbA1c with denominator
+Figure 2: I’-prime chart of average HbA1c with denominator.
 </p>
 </div>
 </div>
-<div id="i-chart-vs-p-and-u-charts-for-count-data" class="section level3" number="4.2">
-<h3><span class="header-section-number">4.2</span> I’-chart vs P and U charts for count data</h3>
-<p>In the following plots, the control limits from the I’-chart algorithm are superimposed as red lines on the original Shewhart charts.</p>
-<p>Figure <a href="#fig:pchart">3</a> is a P control chart of the percentage of patients with bacteremia from Table <a href="#tab:tabbac">2</a> who died within 30 days after infection. As seen, the I’-limits are (in this case) a bit wider. However, the difference is, for practical purposes, negligible.</p>
+<div id="i-prime-chart-vs-p-and-u-charts-for-count-data" class="section level3" number="4.2">
+<h3><span class="header-section-number">4.2</span> I’-prime chart vs P and U charts for count data</h3>
+<p>In the following plots, the control limits from the I’-prime chart algorithm are superimposed as red lines on the original Shewhart charts.</p>
+<p>Figure <a href="#fig:pchart">3</a> is a P control chart of the percentage of patients with bacteremia from Table <a href="#tab:tabbac">2</a> who died within 30 days after infection. As seen, the I’-prime limits are (in this case) a bit wider. However, the difference is, for practical purposes, negligible.</p>
 <div class="figure"><span style="display:block;" id="fig:pchart"></span>
-<svg id="svg_df9bb9a0b6acd90b6510" role="img" aria-label="P chart of proportion patients who died of bacteremia. Grey background: control limits from original chart. Red lines: control limits from I&#39;-chart" alt="P chart of proportion patients who died of bacteremia. Grey background: control limits from original chart. Red lines: control limits from I&#39;-chart" width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_df9bb9a0b6acd90b6510" role="img" aria-label="P chart of proportion patients who died of bacteremia. Grey background: control limits from original chart. Red lines: control limits from I&#39;-prime chart." alt="P chart of proportion patients who died of bacteremia. Grey background: control limits from original chart. Red lines: control limits from I&#39;-prime chart." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_df9bb9a0b6acd90b6510_glyph-0-0">
@@ -2228,13 +2228,13 @@ Figure 2: I’-chart of average HbA1c with denominator
 </g>
 </svg>
 <p class="caption">
-Figure 3: P chart of proportion patients who died of bacteremia. Grey background: control limits from original chart. Red lines: control limits from I’-chart
+Figure 3: P chart of proportion patients who died of bacteremia. Grey background: control limits from original chart. Red lines: control limits from I’-prime chart.
 </p>
 </div>
-<p>This observation aligns with our experience testing various datasets comparing Shewhart control charts (Xbar, P, C, and U) with I’ limits (see Appendix for examples). While the I’ limits are sometimes slightly wider or narrower than the original limits, the differences are rarely significant enough to affect the analysis conclusions.</p>
-<p>Figure <a href="#fig:ppchart">4</a> plots the same data as Figure <a href="#fig:pchart">3</a> but the original control limits have been calculated using the procedure for P’-charts as suggested by Laney <span class="citation">(<a href="#ref-laney2002">Laney 2002</a>; <a href="#ref-mohammed2013">Mohammed A. Mohammed et al. 2013</a>)</span>.</p>
+<p>This observation aligns with our experience testing various datasets comparing Shewhart control charts (Xbar, P, C, and U) with I’-prime limits (see Appendix for examples). While the I’-prime limits are sometimes slightly wider or narrower than the original limits, the differences are rarely significant enough to affect the analysis conclusions.</p>
+<p>Figure <a href="#fig:ppchart">4</a> plots the same data as Figure <a href="#fig:pchart">3</a> but the original control limits have been calculated using the procedure for P prime charts as suggested by Laney <span class="citation">(<a href="#ref-laney2002">Laney 2002</a>; <a href="#ref-mohammed2013">Mohammed A. Mohammed et al. 2013</a>)</span>.</p>
 <div class="figure"><span style="display:block;" id="fig:ppchart"></span>
-<svg id="svg_6096436091772b93634f" role="img" aria-label="P&#39;-chart of proportion patients who died of bacteremia." alt="P&#39;-chart of proportion patients who died of bacteremia." width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_6096436091772b93634f" role="img" aria-label="P prime chart of proportion patients who died of bacteremia." alt="P prime chart of proportion patients who died of bacteremia." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_6096436091772b93634f_glyph-0-0">
@@ -2449,12 +2449,12 @@ Figure 3: P chart of proportion patients who died of bacteremia. Grey background
 </g>
 </svg>
 <p class="caption">
-Figure 4: P’-chart of proportion patients who died of bacteremia.
+Figure 4: P prime chart of proportion patients who died of bacteremia.
 </p>
 </div>
-<p>As seen (and expected from theory), the I’ limits match the P’ limits. This observation has also been confirmed with other datasets and with the U- and U’-chart of infection rates as demonstrated below (figures <a href="#fig:uchart">5</a> and <a href="#fig:upchart">6</a>).</p>
+<p>As seen (and expected from theory), the I’-prime limits match the P prime limits. This observation has also been confirmed with other datasets and with the U and U prime chart of infection rates as demonstrated below (figures <a href="#fig:uchart">5</a> and <a href="#fig:upchart">6</a>).</p>
 <div class="figure"><span style="display:block;" id="fig:uchart"></span>
-<svg id="svg_1753ef66cce911e10811" role="img" aria-label="U chart of infection rates" alt="U chart of infection rates" width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_1753ef66cce911e10811" role="img" aria-label="U chart of infection rates." alt="U chart of infection rates." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_1753ef66cce911e10811_glyph-0-0">
@@ -2759,11 +2759,11 @@ Figure 4: P’-chart of proportion patients who died of bacteremia.
 </g>
 </svg>
 <p class="caption">
-Figure 5: U chart of infection rates
+Figure 5: U chart of infection rates.
 </p>
 </div>
 <div class="figure"><span style="display:block;" id="fig:upchart"></span>
-<svg id="svg_937d82c72af7a5ee32b1" role="img" aria-label="U&#39;-chart of infection rates" alt="U&#39;-chart of infection rates" width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_937d82c72af7a5ee32b1" role="img" aria-label="U prime chart of infection rates." alt="U prime chart of infection rates." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_937d82c72af7a5ee32b1_glyph-0-0">
@@ -3068,7 +3068,7 @@ Figure 5: U chart of infection rates
 </g>
 </svg>
 <p class="caption">
-Figure 6: U’-chart of infection rates
+Figure 6: U prime chart of infection rates.
 </p>
 </div>
 </div>
@@ -3079,15 +3079,15 @@ Figure 6: U’-chart of infection rates
 <p>We have three key findings:</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>The I’-chart produces results that exactly matches the original I-chart when applied to individual measurement data (subgroup size = 1). This validates the I’-chart as a generalization rather than a replacement, ensuring continuity for users familiar with the original method.</p></li>
-<li><p>The I’-chart produces control limits that are “wavy” or undulating when denominators change over time. This visual representation offers added insight, making variability in data precision explicit and encouraging more insightful interpretation, while reducing the risk of false signals or missed alarms.</p></li>
+<li><p>The I’-prime chart produces control limits that are “wavy” or undulating when denominators change over time. This visual representation offers added insight, making variability in data precision explicit and encouraging more insightful interpretation, while reducing the risk of false signals or missed alarms.</p></li>
 <li><p>The I’-chart closely approximates the behaviour of Laney’s prime charts (P’-chart and U’-charts) and shows reasonable alignment with other popular SPC charts (X-bar, C-, U-, and P-charts).</p></li>
 </ol>
 <p>In addition, for measurement and count data with varying denominators, the I’-chart adjusts the centre line by using the weighted rather than the unweighted average for centre line. This makes it more sensitive and appropriate in real-world healthcare settings where case volume, exposure time, or other denominators often vary over time.</p>
 <p>A key strength of the I’-chart is that it maintains the simplicity of the I-chart while offering a more context-sensitive representation of variation.</p>
-<p>One potential barrier to the adoption of the I’- chart is its more complex formulae compared to the standard I-chart. Calculating variable control limits that adjust for changing denominators involves additional statistical steps, which may be a barrier to practitioners accustomed to simpler SPC methods. However, this complexity is readily overcome with modern software tools, which can automate these calculations and present the results in user-friendly formats.</p>
+<p>One potential barrier to the adoption of the I’-chart is its more complex formulae compared to the standard I-chart. Calculating variable control limits that adjust for changing denominators involves additional statistical steps, which may be a barrier to practitioners accustomed to simpler SPC methods. However, this complexity is readily overcome with modern software tools, which can automate these calculations and present the results in user-friendly formats.</p>
 <p>As with other advanced analytic techniques in healthcare, once embedded in software, the additional complexity becomes largely invisible to end users – allowing them to benefit from more accurate and context-sensitive charts without increasing the technical burden.</p>
 <p>We recommend that SPC software incorporate the I’-chart and make it easy for users to compare traditional SPC charts (e.g. I- and P-charts, etc) alongside the I’-chart, because this side-by-side comparison of data using different SPC charts itself can also be insightful <span class="citation">(<a href="#ref-mohammed2013a">Mohammed A. Mohammed and Worthington 2013</a>)</span>.</p>
-<p>The I’-chart has superior design properties to the traditional I-chart and so merits broader use and evaluation. Our findings demonstrate that the I’-chart retains the simplicity and intuitive appeal of the I-chart whilst accommodating variation in denominators, making it suitable for both measurement and count data.</p>
+<p>The I’-chart has superior design properties to the traditional I-chart and so merits broader use and evaluation. Our findings demonstrate that the I’-chart retains the simplicity and intuitive appeal of the I-chart whilst accommodating variation in subgroup sizes, making it suitable for both measurement and count data.</p>
 <p>We are keen to learn how others in the field perceive its value and whether it enhances their ability to monitor and improve processes using real-world healthcare data.</p>
 </div>
 <div id="data-sets-1" class="section level2" number="6">
@@ -3528,8 +3528,8 @@ Figure 6: U’-chart of infection rates
 </div>
 <div id="appendix-supplementary-plots" class="section level2" number="7">
 <h2><span class="header-section-number">7</span> Appendix: Supplementary plots</h2>
-<div id="i-and-i-charts-from-individual-random-normal-measurements" class="section level3" number="7.1">
-<h3><span class="header-section-number">7.1</span> I and I’-charts from individual random normal measurements</h3>
+<div id="i-and-i-prime-charts-from-individual-random-normal-measurements" class="section level3" number="7.1">
+<h3><span class="header-section-number">7.1</span> I and I’-prime charts from individual random normal measurements</h3>
 <div class="figure"><span style="display:block;" id="fig:richart"></span>
 <svg id="svg_0f2d944da4201ba242d9" role="img" aria-label="I-chart from 24 random data from a normal distribution without denominator." alt="I-chart from 24 random data from a normal distribution without denominator." width="864" height="324" viewBox="0 0 648 324">
 <defs>
@@ -3733,7 +3733,7 @@ Figure 7: I-chart from 24 random data from a normal distribution without denomin
 </p>
 </div>
 <div class="figure"><span style="display:block;" id="fig:ripchart"></span>
-<svg id="svg_f2548239f667699c925e" role="img" aria-label="I&#39;-chart from 24 random, normal data with denominator." alt="I&#39;-chart from 24 random, normal data with denominator." width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_f2548239f667699c925e" role="img" aria-label="I&#39;-prime chart from 24 random, normal data with denominator." alt="I&#39;-prime chart from 24 random, normal data with denominator." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_f2548239f667699c925e_glyph-0-0">
@@ -3939,14 +3939,14 @@ Figure 7: I-chart from 24 random data from a normal distribution without denomin
 </g>
 </svg>
 <p class="caption">
-Figure 8: I’-chart from 24 random, normal data with denominator.
+Figure 8: I’-prime chart from 24 random, normal data with denominator.
 </p>
 </div>
 </div>
 <div id="xbar-charts-from-multiple-random-normal-measurements" class="section level3" number="7.2">
 <h3><span class="header-section-number">7.2</span> Xbar charts from multiple random normal measurements</h3>
 <div class="figure"><span style="display:block;" id="fig:rxbarchart1"></span>
-<svg id="svg_bf9d3f5b654b1941072a" role="img" aria-label="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39; limits a bit wider than Xbar limits." alt="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39; limits a bit wider than Xbar limits." width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_bf9d3f5b654b1941072a" role="img" aria-label="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39;-prime limits a bit wider than Xbar limits." alt="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39;-prime limits a bit wider than Xbar limits." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_bf9d3f5b654b1941072a_glyph-0-0">
@@ -4160,11 +4160,11 @@ Figure 8: I’-chart from 24 random, normal data with denominator.
 </g>
 </svg>
 <p class="caption">
-Figure 9: Xbar chart from 24 subgroups of 10 to 20 random normal data. I’ limits a bit wider than Xbar limits.
+Figure 9: Xbar chart from 24 subgroups of 10 to 20 random normal data. I’-prime limits a bit wider than Xbar limits.
 </p>
 </div>
 <div class="figure"><span style="display:block;" id="fig:rxbarchart2"></span>
-<svg id="svg_e7d1afa1e5fea9fafffc" role="img" aria-label="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39; limits close to Xbar limits." alt="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39; limits close to Xbar limits." width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_e7d1afa1e5fea9fafffc" role="img" aria-label="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39;-prime limits close to Xbar limits." alt="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39;-prime limits close to Xbar limits." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_e7d1afa1e5fea9fafffc_glyph-0-0">
@@ -4368,11 +4368,11 @@ Figure 9: Xbar chart from 24 subgroups of 10 to 20 random normal data. I’ limi
 </g>
 </svg>
 <p class="caption">
-Figure 10: Xbar chart from 24 subgroups of 10 to 20 random normal data. I’ limits close to Xbar limits.
+Figure 10: Xbar chart from 24 subgroups of 10 to 20 random normal data. I’-prime limits close to Xbar limits.
 </p>
 </div>
 <div class="figure"><span style="display:block;" id="fig:rxbarchart3"></span>
-<svg id="svg_7647ba90e03b8e5a733d" role="img" aria-label="Xbar-chart from 24 subgroups of 10 to 20 random normal data. I prime limits a bit wider than Xbar limits." alt="Xbar-chart from 24 subgroups of 10 to 20 random normal data. I prime limits a bit wider than Xbar limits." width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_7647ba90e03b8e5a733d" role="img" aria-label="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39;-prime limits a bit wider than Xbar limits." alt="Xbar chart from 24 subgroups of 10 to 20 random normal data. I&#39;-prime limits a bit wider than Xbar limits." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_7647ba90e03b8e5a733d_glyph-0-0">
@@ -4583,12 +4583,12 @@ Figure 10: Xbar chart from 24 subgroups of 10 to 20 random normal data. I’ lim
 </g>
 </svg>
 <p class="caption">
-Figure 11: Xbar-chart from 24 subgroups of 10 to 20 random normal data. I prime limits a bit wider than Xbar limits.
+Figure 11: Xbar chart from 24 subgroups of 10 to 20 random normal data. I’-prime limits a bit wider than Xbar limits.
 </p>
 </div>
 </div>
-<div id="p--and-p-charts-from-random-binomial-data" class="section level3" number="7.3">
-<h3><span class="header-section-number">7.3</span> P- and P’ charts from random binomial data</h3>
+<div id="p-and-p-prime-charts-from-random-binomial-data" class="section level3" number="7.3">
+<h3><span class="header-section-number">7.3</span> P and P prime charts from random binomial data</h3>
 <div class="figure"><span style="display:block;" id="fig:rppchart"></span>
 <svg id="svg_8f4ca44c6c41817fef24" role="img" aria-label="P chart of 24 random data from a binomial distribution." alt="P chart of 24 random data from a binomial distribution." width="864" height="324" viewBox="0 0 648 324">
 <defs>
@@ -4776,7 +4776,7 @@ Figure 12: P chart of 24 random data from a binomial distribution.
 </p>
 </div>
 <div class="figure"><span style="display:block;" id="fig:rpchart"></span>
-<svg id="svg_7a0fe2cd9086104f7e09" role="img" aria-label="P&#39;-chart of 24 random data from a binomial distribution." alt="P&#39;-chart of 24 random data from a binomial distribution." width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_7a0fe2cd9086104f7e09" role="img" aria-label="P prime chart of 24 random data from a binomial distribution." alt="P prime chart of 24 random data from a binomial distribution." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_7a0fe2cd9086104f7e09_glyph-0-0">
@@ -4955,14 +4955,14 @@ Figure 12: P chart of 24 random data from a binomial distribution.
 </g>
 </svg>
 <p class="caption">
-Figure 13: P’-chart of 24 random data from a binomial distribution.
+Figure 13: P prime chart of 24 random data from a binomial distribution.
 </p>
 </div>
 </div>
-<div id="u--and-u-charts-from-random-poisson-data" class="section level3" number="7.4">
-<h3><span class="header-section-number">7.4</span> U- and U’-charts from random poisson data</h3>
+<div id="u-and-u-prime-charts-from-random-poisson-data" class="section level3" number="7.4">
+<h3><span class="header-section-number">7.4</span> U and U prime charts from random poisson data</h3>
 <div class="figure"><span style="display:block;" id="fig:ruchart"></span>
-<svg id="svg_36e6eac3a34ce8198133" role="img" aria-label="U chart from 24 random data from a poisson distribution" alt="U chart from 24 random data from a poisson distribution" width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_36e6eac3a34ce8198133" role="img" aria-label="U chart from 24 random data from a poisson distribution." alt="U chart from 24 random data from a poisson distribution." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_36e6eac3a34ce8198133_glyph-0-0">
@@ -5169,11 +5169,11 @@ Figure 13: P’-chart of 24 random data from a binomial distribution.
 </g>
 </svg>
 <p class="caption">
-Figure 14: U chart from 24 random data from a poisson distribution
+Figure 14: U chart from 24 random data from a poisson distribution.
 </p>
 </div>
 <div class="figure"><span style="display:block;" id="fig:rupchart"></span>
-<svg id="svg_038d26b503ae6d4eafe7" role="img" aria-label="U&#39;-prime chart from 24 random data from a poisson distribution." alt="U&#39;-prime chart from 24 random data from a poisson distribution." width="864" height="324" viewBox="0 0 648 324">
+<svg id="svg_038d26b503ae6d4eafe7" role="img" aria-label="U prime chart from 24 random data from a poisson distribution." alt="U prime chart from 24 random data from a poisson distribution." width="864" height="324" viewBox="0 0 648 324">
 <defs>
 <g>
 <g id="svg_038d26b503ae6d4eafe7_glyph-0-0">
@@ -5388,7 +5388,7 @@ Figure 14: U chart from 24 random data from a poisson distribution
 </g>
 </svg>
 <p class="caption">
-Figure 15: U’-prime chart from 24 random data from a poisson distribution.
+Figure 15: U prime chart from 24 random data from a poisson distribution.
 </p>
 </div>
 </div>
