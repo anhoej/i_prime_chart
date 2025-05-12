@@ -149,7 +149,7 @@ Additionally, we constructed a large number of I'-prime charts using both random
 
 ## Results
 
-### I'-prime chart for measurement data with denominator
+### I'-chart for measurement data with denominator
 
 Figure \@ref(fig:ichart) is an I-chart of the monthly HbA1c averages from Table \@ref(tab:tabhba1c). Notice the data point above the upper control limit in April 2020 suggesting a special cause. However, when plotting aggregated measurement data, the I-chart does not account for variations in subgroup size.
 
@@ -173,7 +173,7 @@ qic(month, avg_hba1c * n, n,
     xlab = 'Month')
 ```
 
-### I'-prime chart vs P and U charts for count data
+### I'-chart vs P and U charts for count data
 
 In the following plots, the control limits from the I'-prime chart algorithm are superimposed as red lines on the original Shewhart charts.
 
