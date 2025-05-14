@@ -33,7 +33,7 @@ library(patchwork)
 # Function to plot control limits from the In chart on top of Shewhart chart ---
 compplot <- function(x, y, n = NULL, chart, ...) {
   p1 <- qic(x, y, n, chart = chart, ...)
-  p2 <- qic(x, y, n, chart = 'in', ...)
+  p2 <- qic(x, y, n, chart = 'ip', ...)
   
   p1 +
     geom_line(aes(y = lcl), data = p2$data, colour = 'tomato') +
@@ -68,6 +68,15 @@ n <- round(runif(24, 100, 120))
 y <- rbinom(24, n, 0.01)
 compplot(x, y, n, 'p') /
   compplot(x, y, n, 'pp')
+
+# big numbers
+n <- round(runif(24, 100, 120))
+y <- rbinom(24, n, 0.5)
+compplot(x, y, n, 'p') /
+  compplot(x, y, n, 'pp')
+
+p1 <- compplot(x, y, n, 'p')
+layer_scales(p1)$y$range$range
 
 # Random poisson data ----------------------------------------------------------
 x <- 1:24
