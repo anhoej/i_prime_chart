@@ -6,6 +6,7 @@ output:
   bookdown::html_document2:
     toc: true
     toc_float: true
+    css: style.css
 bibliography: [references.bib, packages.bib]
 link-citations: true
 editor_options:
@@ -145,7 +146,7 @@ To demonstrate the use of I'-charts on count data we used data on bacteremia cas
 
 Data sets and R code are available from the GitHub repository (https://github.com/anhoej/i_prime_chart).
 
-Additionally, we constructed a large number of I'-charts using both random data from normal, binomial, and poisson distributions and several other data sets from clinical practice. See the appendix for examples of additional plots.
+Additionally, we constructed a large number of I'-charts using both random data from normal, binomial, and Poisson distributions and several other data sets from clinical practice. See the appendix for examples of additional plots.
 
 ## Results
 
@@ -275,6 +276,8 @@ knitr::kable(bac)
 
 ## Appendix: Supplementary plots
 
+The following plots were generated using pseudo-random data drawn from normal, binomial, and Poisson distributions in R. For instance, the function call `rnorm(24, mean = 9, sd = 3)` produces a vector of 24 values sampled from a normal distribution with a mean of 9 and a standard deviation of 3. To ensure the results are reproducible, we used the set.seed() function to fix the state of the random number generator before each plot.
+
 ### I- and I'-charts from individual random normal measurements
 
 ```{r richart, fig.cap="I-chart from 24 random data from a normal distribution (mean = 20, SD = 3) with subgroup size = 1."}
@@ -283,11 +286,17 @@ x <- 1:24                     # subgroups
 y <- rnorm(24, 20, 3)         # numerators
 n <- runif(24, 80, 120)       # denominators
 
-compplot(x, y, chart = 'i', title = NULL)
+p1 <- compplot(x, y, chart = 'i', title = NULL)
+p2 <- compplot(x, y * n, n, chart = 'i', title = NULL)
+
+ylim <- range(layer_scales(p1)$y$range$range,
+              layer_scales(p2)$y$range$range)
+
+p1 + scale_y_continuous(limits = ylim)
 ```
 
 ```{r ripchart, fig.cap="I'-chart from 24 random, normal data with denominators ranging from 80 to 120."}
-compplot(x, y * n, n, chart = 'i', title = NULL)
+p2 + scale_y_continuous(limits = ylim)
 ```
 
 ### Xbar charts from multiple random normal measurements
@@ -296,21 +305,34 @@ compplot(x, y * n, n, chart = 'i', title = NULL)
 set.seed(1)
 x <- rep(1:24, round(runif(24, 10, 20)))
 y <- rnorm(length(x), 9)
-compplot(x, y, chart = 'xbar', title = NULL)
-```
+p1 <- compplot(x, y, chart = 'xbar', title = NULL)
 
-```{r rxbarchart2, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data. I' limits close to Xbar limits."}
 set.seed(6)
 x <- rep(1:24, round(runif(24, 10, 20)))
 y <- rnorm(length(x), 9)
-compplot(x, y, chart = 'xbar', title = NULL)
-```
+p2 <- compplot(x, y, chart = 'xbar', title = NULL)
 
-```{r rxbarchart3, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data. I' limits a bit wider than Xbar limits."}
 set.seed(8)
 x <- rep(1:24, round(runif(24, 10, 20)))
 y <- rnorm(length(x), 9)
-compplot(x, y, chart = 'xbar', title = NULL)
+p3 <- compplot(x, y, chart = 'xbar', title = NULL)
+
+ylim <- range(layer_scales(p1)$y$range$range,
+              layer_scales(p2)$y$range$range,
+              layer_scales(p3)$y$range$range)
+
+p1 + scale_y_continuous(limits = ylim)
+
+```
+
+```{r rxbarchart2, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data. I' limits close to Xbar limits."}
+
+p2 + scale_y_continuous(limits = ylim)
+```
+
+```{r rxbarchart3, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data. I' limits a bit tigther than Xbar limits."}
+
+p3 + scale_y_continuous(limits = ylim)
 ```
 
 ### P- and P'-charts from random binomial data
@@ -320,11 +342,19 @@ set.seed(1)
 x <- 1:24
 n <- round(runif(24, 100, 120))
 y <- rbinom(24, n, 0.1)
-compplot(x, y, n, 'p', title = NULL)
+
+p1 <- compplot(x, y, n, 'p', title = NULL)
+p2 <- compplot(x, y, n, 'pp', title = NULL)
+
+
+ylim <- range(layer_scales(p1)$y$range$range,
+              layer_scales(p2)$y$range$range)
+
+p1 + scale_y_continuous(limits = ylim)
 ```
 
 ```{r rpchart, fig.cap="P'-chart of 24 random data from a binomial distribution."}
-compplot(x, y, n, 'pp', title = NULL)
+p2 + scale_y_continuous(limits = ylim)
 ```
 
 ### U- and U'-charts from random poisson data
@@ -334,11 +364,19 @@ set.seed(1)
 x <- 1:24
 n <- (runif(24, 90, 110))
 y <- rpois(24, 25)
-compplot(x, y, n, chart = 'u', title = NULL)
+
+p1 <- compplot(x, y, n, chart = 'u', title = NULL)
+p2 <- compplot(x, y, n, chart = 'up', title = NULL)
+
+ylim <- range(layer_scales(p1)$y$range$range,
+              layer_scales(p2)$y$range$range)
+
+p1 + scale_y_continuous(limits = ylim)
 ```
 
 ```{r rupchart, fig.cap="U'-chart from 24 random data from a poisson distribution."}
-compplot(x, y, n, chart = 'up', title = NULL)
+
+p2 + scale_y_continuous(limits = ylim)
 ```
 
 ## References
