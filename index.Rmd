@@ -8,6 +8,7 @@ output:
     toc_float: true
     css: style.css
 bibliography: [references.bib, packages.bib]
+csl: bmj-quality-and-safety.csl
 link-citations: true
 editor_options:
   chunk_output_type: console
@@ -99,10 +100,10 @@ $$
 
 The procedure for calculating control limits for the I'-chart adjusts the moving ranges by a factor that depends on the subgroup sizes. We use the following symbols:
 
-* n = numerators
-* d = denominators (subgroup sizes)
-* o = number of subgroups
-* i = i^th^ data value
+* $n$ = numerators
+* $d$ = denominators (subgroup sizes)
+* $o$ = number of subgroups
+* $i$ = i^th^ data value
 
 Values to plot:
 
@@ -274,6 +275,12 @@ knitr::kable(hba1c)
 knitr::kable(bac)
 ```
 
+## References
+
+<div id="refs"></div>
+
+----
+
 ## Appendix: Supplementary plots
 
 The following plots were generated using pseudo-random data drawn from normal, binomial, and Poisson distributions in R. For instance, the function call `rnorm(24, mean = 9, sd = 3)` produces a vector of 24 values sampled from a normal distribution with a mean of 9 and a standard deviation of 3. To ensure the results are reproducible, we used the set.seed() function to fix the state of the random number generator before each plot.
@@ -378,5 +385,3 @@ p1 + scale_y_continuous(limits = ylim)
 
 p2 + scale_y_continuous(limits = ylim)
 ```
-
-## References
