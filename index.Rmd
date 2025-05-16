@@ -42,7 +42,7 @@ compplot <- function(x, y, n = NULL, chart, ...) {
 
 ----
 
-## Abstract
+## Abstract {-}
 
 Statistical Process Control (SPC) is widely used in healthcare to monitor and improve care quality by distinguishing between common and special cause variation using SPC charts. However, selecting the appropriate chart can be challenging due to complex data types and limited statistical training. The Individuals (I-) chart is popular for its simplicity but assumes constant subgroup sizes -- a condition often violated in healthcare, where denominators such as numbers of patients or observation periods vary over time. Misapplication of the I-chart in these contexts can lead to misleading control limits and unreliable signals.
 
@@ -50,13 +50,13 @@ This paper introduces the I-prime (I'-) chart, which was developed to accommodat
 
 We report three main findings: a) The I'-chart produces identical results to the I-chart when applied to individual data (subgroup size = 1). b) It generates “wavy” control limits when denominators vary, making the precision of the data more explicit and aiding interpretation while reducing false or missed signals. c) For attribute data, the I'-chart approximates the performance of Laney's P'- and U'-charts and aligns well with other commonly used SPC charts.
 
-The I'-chart has superior design properties to the traditional I-chart and merits broader use and evaluation. The use of the I-chart for data with varying denominators is increasingly difficult to justify.
+The I'-chart has superior design properties to the traditional I-chart and merits broader use and evaluation. The use of the traditional I-chart for data with varying denominators is increasingly difficult to justify.
 
 ----
 
 ## Introduction
 
-Statistical Process Control (SPC) is widely used in healthcare to monitor and improve the quality and safety of care delivery processes [@carey2002a;@carey2002b;@mohammed2008]. At its core, SPC methodology distinguishes between two types of variation: common cause variation, which reflects inherent fluctuations within a stable process and special cause variation, which signals a change in the underlying process due to an assignable cause.
+Statistical Process Control (SPC) is widely used in healthcare to monitor and improve the quality and safety of care delivery processes [@carey2002a;@carey2002b;@mohammed2008;@anhoej2016]. At its core, SPC methodology distinguishes between two types of variation: common cause variation, which reflects inherent fluctuations within a stable process and special cause variation, which signals a change in the underlying process due to an assignable cause.
 
 SPC charts help users visualise the behaviour of data from a process and identify signals of special cause variation using statistically defined control limits.
 
