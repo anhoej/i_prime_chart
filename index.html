@@ -1514,7 +1514,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Introducing the I’-chart: an improved individuals chart</h1>
 <h4 class="author">Jacob Anhøj, Wayne Taylor &amp; Mohammed Amin Mohammed</h4>
-<h4 class="date">2025-05-16 WORK IN PROGRESS</h4>
+<h4 class="date">2025-05-20 WORK IN PROGRESS</h4>
 
 </div>
 
@@ -1661,11 +1661,14 @@ Figure 6: U’ chart of infection rates. Grey background: control limits from U�
 <ol style="list-style-type: lower-alpha">
 <li><p>The I’-chart produces results that exactly matches the original I-chart when applied to individual measurement data (subgroup size = 1). This validates the I’-chart as a generalization rather than a replacement, ensuring continuity for users familiar with the original method.</p></li>
 <li><p>The I’-chart produces control limits that are “wavy” or undulating when denominators change over time. This visual representation offers added insight, making variability in data precision explicit and encouraging more insightful interpretation, while reducing the risk of false signals or missed alarms.</p></li>
-<li><p>The I’-chart closely approximates the behaviour of Laney’s prime charts (P’-chart and U’-charts) and shows reasonable alignment with other popular SPC charts (X-bar, C-, U-, and P-charts).</p></li>
+<li><p>For count data, the I’-chart closely approximates the behaviour of Laney’s prime charts (P’-chart and U’-charts). Also, the I’ chart can be used to normalize non-count data, like averages, where P’- and U’-charts do not apply. For averages, the I’ chart accounts for both between and within subgroup variation, which can cause false positives on an X-bar chart.</p></li>
 </ol>
-<p>In addition, for measurement and count data with varying denominators, the I’-chart adjusts the centre line by using the weighted rather than the unweighted average for centre line. This makes it more sensitive and appropriate in real-world healthcare settings where case volume, exposure time, or other denominators often vary over time.</p>
-<p>Consequently, the I’ chart can be used to normalize non-count data, like the averages, where a P’ and U’ chart do not apply.</p>
-<p>A key strength of the I’-chart is that it maintains the simplicity of the I-chart while offering a more context-sensitive representation of variation.</p>
+<p>In addition, for measurement and count data with varying denominators, the I’-chart adjusts the centre line by using the weighted rather than the unweighted average for centre line.</p>
+<p>Our findings suggest that the I’-chart is more sensitive and appropriate in real-world healthcare settings where case volume, exposure time, or other denominators often vary over time. A key strength of the I’-chart is that it maintains the simplicity of the I-chart while offering a more context-sensitive representation of variation.</p>
+<p>A single chart, the I’-chart, can replace the myriad of SPC charts (Xbar-, C-, U-, P-, U’-, and P’-charts), as it gives consistent results.</p>
+<!-- In addition, for measurement and count data with varying denominators, the I'-chart adjusts the centre line by using the weighted rather than the unweighted average for centre line. This makes it more sensitive and appropriate in real-world healthcare settings where case volume, exposure time, or other denominators often vary over time. -->
+<!-- Consequently, the I' chart can be used to normalize non-count data, like the averages, where a P' and U' chart do not apply. -->
+<!-- A key strength of the I'-chart is that it maintains the simplicity of the I-chart while offering a more context-sensitive representation of variation.  -->
 <p>One potential barrier to the adoption of the I’-chart is its more complex formulae compared to the standard I-chart. Calculating variable control limits that adjust for changing denominators involves additional statistical steps, which may be a barrier to practitioners accustomed to simpler SPC methods. However, this complexity is readily overcome with modern software tools, which can automate these calculations and present the results in user-friendly formats.</p>
 <p>As with other advanced analytic techniques in healthcare, once embedded in software, the additional complexity becomes largely invisible to end users – allowing them to benefit from more accurate and context-sensitive charts without increasing the technical burden.</p>
 <p>We recommend that SPC software incorporate the I’-chart and make it easy for users to compare traditional SPC charts (e.g. I- and P-charts, etc) alongside the I’-chart, because this side-by-side comparison of data using different SPC charts itself can also be insightful <span class="citation">[<a href="#ref-mohammed2013a">12</a>]</span>.</p>
