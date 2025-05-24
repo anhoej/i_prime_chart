@@ -48,9 +48,9 @@ Statistical Process Control (SPC) is widely used in healthcare to monitor and im
 
 This paper introduces the I-prime (I') chart, which was developed to accommodate varying denominators and handle both measurement and count data. We evaluate the performance of the I'-chart using a range of healthcare datasets, guided by three key questions: a) How does the I'-chart compare to the I-chart for subgroup sizes of one? b) How does it handle varying subgroup sizes? And c) how does it perform relative to other common SPC charts?
 
-We report three main findings: a) The I'-chart produces identical results to the I-chart when applied to individual data (subgroup size = 1). b) It generates “wavy” control limits when denominators vary, making the precision of the data more explicit and aiding interpretation while reducing false or missed signals. c) For attribute data, the I'-chart approximates the performance of Laney's P'- and U'-charts and aligns well with other commonly used SPC charts.
+We report three main findings: a) The I'-chart produces identical results to the I-chart when applied to individual data (subgroup size = 1). b) It generates “wavy” control limits when denominators vary, making the precision of the data more explicit and aiding interpretation while reducing false or missed signals. c) For attribute data, the I'-chart approximates the performance of Laney's P'- and U'-charts, and it aligns well with other commonly used SPC charts.
 
-In conclusion, the I'-chart has superior design properties to the traditional I-chart and merits broader use and evaluation, the use of the traditional I-chart for data with varying denominators is increasingly difficult to justify, and it has the potential to replace other commonly used SPC charts.
+In conclusion, the I'-chart has superior design properties to the traditional I-chart and merits broader use and evaluation, it has the potential to replace other commonly used SPC charts, and the use of the traditional I-chart for data with varying denominators is increasingly difficult to justify.
 
 ----
 
@@ -58,27 +58,27 @@ In conclusion, the I'-chart has superior design properties to the traditional I-
 
 Statistical Process Control (SPC) is widely used in healthcare to monitor and improve the quality and safety of care delivery processes [@carey2002a;@carey2002b;@mountford2016;@anhoej2016]. At its core, SPC methodology distinguishes between two types of variation: common cause variation, which reflects inherent fluctuations within a stable process and special cause variation, which signals a change in the underlying process due to an assignable cause.
 
-SPC charts help users visualise the behaviour of data from a process and identify signals of special cause variation using statistically defined control limits.
+SPC charts are line graphs that help users visualise the behaviour of data from a process over time and identify signals of special cause variation using statistically defined control limits.
 
-There are scores of SPC charts and choosing the appropriate chart can be less than straightforward, especially in healthcare, where data structures are often complex and varied. Measurement data, counts, proportions, and rates with changing denominators are all common -- each requiring a different type of control chart [@mohammed2008;@laney2002].
+There are scores of SPC charts and choosing the appropriate chart can be less than straightforward, especially in healthcare, where data structures are often complex and varied. Most control charts rely on assumptions about the underlying statistical distribution of the data. In practice, diverse data types such as measurements, counts, proportions, and rates with varying denominators are common -- each requiring a different type of control chart [@mohammed2008;@laney2002].
 
 Compounding this challenge is the fact that some practitioners lack formal statistical training, and software defaults often promote the use of a single chart type, typically the Individuals I-chart, regardless of whether it is the most appropriate. These issues can lead to the misapplication of SPC charts, generating misleading signals and undermining improvement efforts.
 
 Among SPC charts, the I-chart is especially popular for its simplicity and flexibility. It was originally developed for settings where data are collected as single measurements over time -- for example, daily blood pressure readings or individual lab test turnaround times -- but have proven useful also for count data like complication rates or procedure compliance. For this reason, the I-chart is often referred to as the Swiss Army Knife of SPC [@wheeler2000, 142].
 
-Unlike other SPC charts, the I-chart estimates process variation directly from the moving ranges between successive data points because the data are individual data points (subgroup size = 1) [@nelson1982]. So the I-chart operates under a key assumption: that each data point reflects the same underlying area of opportunity -- for example, comparable patient volumes, observation periods, or sample sizes.
+Unlike other SPC charts, the I-chart estimates process variation directly from the moving ranges between successive data points [@nelson1982]. So the I-chart operates under a key assumption: that each data point reflects the same underlying area of opportunity -- for example, comparable patient volumes, observation periods, or sample sizes.
 
-In many healthcare contexts, this assumption does not hold. For instance, the percentage of patients with post-surgical complications depends on the number of patients who underwent surgery (the denominator), which varies over time. When such variation in subgroup sizes exists, the use of the I-chart becomes problematic, because the I-chart assumes a constant subgroup size or area of opportunity. This assumption can lead to misleading control limits, and this is why the use of the I-chart for such data remains controversial.
+In many healthcare contexts, this assumption does not hold. For instance, the number of patients with post-surgical complications depends on the number of patients who underwent surgery -- a denominator that often varies over time. When such variation in subgroup sizes exists, the use of the I-chart becomes problematic, as it assumes a constant subgroup size or area of opportunity. This mismatch can result in misleading control limits, which is why the use of the I-chart for such data remains controversial.
 
 To address this limitation, Taylor recently proposed the normalised I-chart or the I'-chart (pronounced: I-prime chart), a modified version of the I-chart, that accommodates varying subgroup sizes [@taylor2018].
 
 In this paper, we introduce the I'-chart, outline its theoretical foundation and evaluate its performance using a range of healthcare data sets. Our paper is guided by the following practical questions:
 
-a. How does the I'-chart compare with the I-chart for subgroup sizes = 1?
+a. How does the I'-chart compare to the I-chart for subgroup sizes of one?
 
 a. How does the I'-chart accommodate varying subgroup sizes?
 
-a. How does the I'-chart compare with other widely used SPC charts?
+a. How does the I'-chart compare to other widely used SPC charts?
 
 ## Materials and methods
 
@@ -147,7 +147,7 @@ Note that when the denominator is 1, the formula simplifies to the standard I-ch
 
 ### Data and software
 
-To demonstrate the use of I'-charts on aggregated measurement data with varying subgroup sizes we used data from a regional outpatient clinic for children with diabetes. For privacy purposes, data were aggregated in advance including the monthly number of children who visited the clinic and their average glycated haemoglobin (HbA1c, a measure of long term blood glucose levels). 
+To demonstrate the use of I'-charts on measurement data with varying subgroup sizes we used data from a regional outpatient clinic for children with diabetes. For privacy purposes, data were aggregated in advance including the monthly number of children who visited the clinic and their average glycated haemoglobin (HbA1c, a measure of long term blood glucose levels). 
 
 To demonstrate the use of I'-charts on count data we used data on bacteremia cases and mortality.
 
@@ -157,13 +157,15 @@ To construct the control charts, we used R version 4.5.0 [@r-core] with the add-
 
 <!-- Data sets and R code are available from the GitHub repository (https://github.com/anhoej/i_prime_chart). -->
 
-Additionally, we constructed a large number of I'-charts using both random data from normal, binomial, and Poisson distributions and several other data sets from clinical practice.
+Additionally, we constructed a large number of I'-charts using both pseudo-random data from normal, binomial, and Poisson distributions, as well as real-world data sets from clinical practice.
 
 ## Results
 
-### I'-chart for measurement data with denominator
+The following plots highlight our main findings based on real-world healthcare data, with Appendix 2 providing additional examples that demonstrate a variety of outcomes generated from pseudo-random data.
 
-Figure \@ref(fig:ichart) is an I-chart of the monthly HbA1c averages from Table \@ref(tab:tabhba1c). Notice the data point above the upper control limit in April 2020 suggesting a special cause. However, when plotting aggregated measurement data, the I-chart does not account for variations in subgroup size.
+### I'-chart for measurement data
+
+Figure \@ref(fig:ichart) shows an I-chart of the monthly HbA1c averages from Table \@ref(tab:tabhba1c) assuming constant subgroup sizes (denominator = 1). As expected, the control limits exactly match those of the corresponding I'-chart (not shown). Notice the data point above the upper control limit in April 2020 suggesting a special cause. However, when plotting aggregated measurement data, the I-chart does not account for variations in subgroup size.
 
 ```{r ichart, fig.cap="I-chart of average HbA1c without denominator. The grey region represents the region between the control limits."}
 qic(month, avg_hba1c,
@@ -176,10 +178,6 @@ qic(month, avg_hba1c,
 
 The I'-chart in Figure \@ref(fig:ipchart) takes the subgroup size (number of patients) into account and adjusts the control limits correspondingly. April 2020 was the first month of lockdown during Covid-19 in Denmark, and the number of patients seen during this month was significantly lower than usual, which allowed for larger than usual common cause variation in measurements and consequently wider control limits this month.
 
-So, when the subgroup size is taken into account, the apparent special cause in Figure \@ref(fig:ichart) is actually within the limits of the expected common cause variation. 
-
-Also, notice that the centre lines are a bit different (60.6 vs 60.3), because the I'-chart uses the weighted rather than the unweighted mean of the averages.
-
 ```{r ipchart, fig.cap="I'-chart of average HbA1c with denominator."}
 qic(month, avg_hba1c * n, n,
     data = hba1c,
@@ -189,11 +187,15 @@ qic(month, avg_hba1c * n, n,
     xlab = 'Month')
 ```
 
-### I'-chart vs P and U charts for count data
+So, when the subgroup size is taken into account, the apparent special cause in Figure \@ref(fig:ichart) is actually within the limits of the expected common cause variation. 
+
+Also, notice that the centre lines are a bit different (60.6 vs 60.3), because the I'-chart uses the weighted rather than the unweighted mean of the averages.
+
+### I'-chart for count data
 
 In the following plots, the control limits from the I'-chart algorithm are superimposed as red lines on the original Shewhart charts.
 
-Figure \@ref(fig:pchart) is a P control chart of the percentage of patients with bacteremia from Table \@ref(tab:tabbac) who died within 30 days after infection. As seen, the I'-chart limits are (in this case) a bit wider. However, the difference is, for practical purposes, negligible. This is generally the case when counts are low and follow the binomial distribution.  However, this assumption frequently does not hold for higher counts, and the I'- and P'-charts are preferred.
+Figure \@ref(fig:pchart) is a P control chart of the percentage of patients with bacteremia, from Table \@ref(tab:tabbac), who died within 30 days after infection. As seen, the I'-chart limits are (in this case) a bit wider. The difference is, for practical purposes, negligible, which is generally the case when counts are low and follow the binomial distribution.  However, this assumption frequently does not hold for higher counts, and the I'- and P'-charts are preferred.
 
 ```{r pchart, fig.cap="P chart of proportion patients who died of bacteremia. Grey background: control limits from P chart. Red lines: control limits from I'-chart."}
 compplot(bac$month, bac$deaths, bac$patients,
@@ -202,7 +204,7 @@ compplot(bac$month, bac$deaths, bac$patients,
          xlab = 'Month')
 ```
 
-This observation is consistent with our experience testing a variety of datasets, where we compared traditional Shewhart control charts (X-bar, P, C, and U) to the I'-chart. Although the I'-chart limits are occasionally slightly wider or narrower than those of the conventional charts, these differences are rarely substantial enough to alter the conclusions of the analysis.
+This observation is consistent with our experience testing a variety of datasets, where we compared traditional Shewhart control charts (X-bar, P, C, and U) to the I'-chart. See Appendix 2 for example plots. Although the I'-chart limits are occasionally slightly wider or narrower than those of the conventional charts, these differences are rarely substantial enough to alter the conclusions of the analysis.
 
 Figure \@ref(fig:ppchart) plots the same data as Figure \@ref(fig:pchart) but the original control limits have been calculated using the procedure for P' charts as suggested by Laney [@laney2002; @mohammed2013].
 
@@ -213,16 +215,7 @@ compplot(bac$month, bac$deaths, bac$patients,
          xlab = 'Month')
 ```
 
-As seen (and expected from theory), the I'-chart limits match the P'-chart limits. This observation has been confirmed with other datasets and with the U'-chart of infection rates as demonstrated in Figure \@ref(fig:upchart).
-
-<!-- ```{r uchart, fig.cap="U chart of infection rates. Grey background: control limits from U chart.  Red lines: control limits from I' chart."} -->
-<!-- compplot(bac$month, bac$ha_infections, bac$risk_days, -->
-<!--          chart = 'u', -->
-<!--          multiply = 10000, -->
-<!--          title = NULL, -->
-<!--          ylab = 'Infections per 10,000 risk days', -->
-<!--          xlab = 'Month') -->
-<!-- ``` -->
+As seen (and expected from theory), the I'-chart limits match the P'-chart limits. The same goes for U'-charts as demonstrated in Figure \@ref(fig:upchart).
 
 ```{r upchart, fig.cap="U' chart of infection rates. Grey background: control limits from U' chart.  Red lines: control limits from I' chart."}
 compplot(bac$month, bac$ha_infections, bac$risk_days,
@@ -243,38 +236,23 @@ a.  The I'-chart produces results that exactly matches the original I-chart when
 
 a. The I'-chart produces control limits that are "wavy" or undulating when denominators change over time. This visual representation offers added insight, making variability in data precision explicit and encouraging more insightful interpretation, while reducing the risk of false signals or missed alarms.
 
-a. For count data, the I'-chart closely approximates the behaviour of Laney’s prime charts (P' and U').  Also, the I'-chart can be used to normalize non-count data, like averages, where P'- and U'-charts do not apply.
+a. For count data, the I'-chart closely approximates the behaviour of Laney’s prime charts (P' and U').  Unlike these charts, however, the I'-chart also supports non-count data -- such as averages -- making it a versatile alternative to other commonly used SPC charts.
 
-<!-- For averages, the I' chart accounts for both between and within subgroup variation, which can cause false positives on an X-bar chart. -->
-
-In addition, for measurement and count data with varying denominators, the I'-chart adjusts the centre line by using the weighted rather than the unweighted average for centre line.
-
-<!-- Our findings suggest that the I'-chart is more sensitive and appropriate than the traditional I-chart for real-world healthcare settings where case volume, exposure time, or other denominators often vary over time. -->
-
-<!-- A key strength of the I'-chart is that it maintains the simplicity of the I-chart while offering a more context-sensitive representation of variation.   -->
+In addition, for measurement and count data with varying denominators, the I'-chart adjusts the centre line by using the weighted rather than the unweighted average ensuring a more reliable estimate of the process centre.
 
 Our findings demonstrate that the I'-chart retains the simplicity and intuitive appeal of the I-chart whilst accommodating variation in subgroup sizes, making it suitable for both measurement and count data. Consequently, the I'-chart has the potential to replace a myriad of SPC charts, as it gives reliable and consistent results regardless of data types.
 
 One potential barrier to the adoption of the I'-chart is its more complex formulae compared to the standard I-chart. Calculating variable control limits that adjust for changing denominators involves additional statistical steps, which may be a barrier to practitioners accustomed to simpler SPC methods. However, this complexity is readily overcome with modern software tools, which can automate these calculations and present the results in user-friendly formats.
 
-<!-- As with other advanced analytic techniques in healthcare, once embedded in software, the additional complexity becomes largely invisible to end users -- allowing them to benefit from more accurate and context-sensitive charts without increasing the technical burden.  -->
-
 We recommend that SPC software incorporate the I'-chart and make it easy for users to compare traditional SPC charts alongside the I'-chart, because this side-by-side comparison of data using different SPC charts itself can also be insightful [@mohammed2013a].
-
-<!-- The I'-chart has superior design properties to the traditional I-chart and so merits broader use and evaluation.  -->
-
-<!-- Given the introduction of the improved I'-chart, which is specifically designed for subgrouped data, the continued default use of the traditional I-chart in such contexts is increasingly difficult to justify. -->
-
 
 In conclusion:
 
 * the I'-chart has superior design properties to the traditional I-chart and merits broader use and evaluation,
 
-* the use of the traditional I-chart for data with varying denominators is increasingly difficult to justify, and
+* it has the potential to replace other commonly used SPC charts, and
 
-* it has the potential to replace other commonly used SPC charts.
-
-
+* the use of the traditional I-chart for data with varying denominators is increasingly difficult to justify.
 
 We are keen to learn how others in the field perceive its value and whether it enhances their ability to monitor and improve processes using real-world healthcare data.
 
@@ -312,12 +290,12 @@ knitr::kable(bac)
 
 ## Appendix 2: Supplementary plots {-}
 
-The following plots were generated using pseudo-random data drawn from normal, binomial, and Poisson distributions in R. For instance, the function call `rnorm(24, mean = 9, sd = 3)` produces a vector of 24 values sampled from a normal distribution with a mean of 9 and a standard deviation of 3. To ensure the results are reproducible, we used the set.seed() function to fix the state of the random number generator before each plot.
+The following plots were generated in R using pseudo-random data sampled from normal, binomial, and Poisson distributions. To illustrate a range of possible outcomes while ensuring reproducibility, we set different seed values for the random number generator.
 
 ### I- and I'-charts from individual random normal measurements {-}
 
-```{r richart, fig.cap="I-chart from 24 random data from a normal distribution (mean = 20, SD = 3) with subgroup size = 1."}
-set.seed(1)                   # fixate random number generator
+```{r richart, fig.cap="I-chart from 24 random data from a normal distribution (mean = 20, SD = 3, seed = 1) without denominator."}
+set.seed(1)                   # fix random number generator
 x <- 1:24                     # subgroups
 y <- rnorm(24, 20, 3)         # numerators
 n <- runif(24, 80, 120)       # denominators
@@ -327,17 +305,17 @@ p2 <- compplot(x, y * n, n, chart = 'i', title = NULL)
 
 ylim <- range(layer_scales(p1)$y$range$range,
               layer_scales(p2)$y$range$range)
-
-p1 + scale_y_continuous(limits = ylim)
+ylim <- scale_y_continuous(limits = ylim)
+p1 + ylim
 ```
 
-```{r ripchart, fig.cap="I'-chart from 24 random, normal data with denominators ranging from 80 to 120."}
-p2 + scale_y_continuous(limits = ylim)
+```{r ripchart, fig.cap="I'-chart from 24 random, normal data (mean = 20, SD = 3, seed = 1) with denominators ranging from 80 to 120."}
+p2 + ylim
 ```
 
-### Xbar charts from multiple random normal measurements {-}
+### Xbar-charts from multiple random normal measurements {-}
 
-```{r rxbarchart1, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1). I' limits a bit wider than Xbar limits."}
+```{r rxbarchart1, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 1). I' limits a bit wider than Xbar limits."}
 set.seed(1)
 x <- rep(1:24, round(runif(24, 10, 20)))
 y <- rnorm(length(x), 9)
@@ -356,24 +334,25 @@ p3 <- compplot(x, y, chart = 'xbar', title = NULL)
 ylim <- range(layer_scales(p1)$y$range$range,
               layer_scales(p2)$y$range$range,
               layer_scales(p3)$y$range$range)
+ylim <- scale_y_continuous(limits = ylim)
 
-p1 + scale_y_continuous(limits = ylim)
+p1 + ylim
 
 ```
 
-```{r rxbarchart2, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data. I' limits close to Xbar limits."}
+```{r rxbarchart2, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 6). I' limits close to Xbar limits."}
 
-p2 + scale_y_continuous(limits = ylim)
+p2 + ylim
 ```
 
-```{r rxbarchart3, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data. I' limits a bit tigther than Xbar limits."}
+```{r rxbarchart3, fig.cap="Xbar chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 8). I' limits a bit tigther than Xbar limits."}
 
-p3 + scale_y_continuous(limits = ylim)
+p3 + ylim
 ```
 
 ### P- and P'-charts from random binomial data {-}
 
-```{r rppchart, fig.cap="P chart of 24 random data from a binomial distribution (p = 0.1, subgroup size ranging from 100 to 120)."}
+```{r rppchart, fig.cap="P chart of 24 random data from a binomial distribution (p = 0.1, subgroup size ranging from 100 to 120, seed = 1)."}
 set.seed(1)
 x <- 1:24
 n <- round(runif(24, 100, 120))
@@ -385,18 +364,19 @@ p2 <- compplot(x, y, n, 'pp', title = NULL)
 
 ylim <- range(layer_scales(p1)$y$range$range,
               layer_scales(p2)$y$range$range)
+ylim <- scale_y_continuous(limits = ylim)
 
-p1 + scale_y_continuous(limits = ylim)
+p1 + ylim
 ```
 
-```{r rpchart, fig.cap="P'-chart of 24 random data from a binomial distribution."}
-p2 + scale_y_continuous(limits = ylim)
+```{r rpchart, fig.cap="P'-chart of 24 random data from a binomial distribution (p = 0.1, subgroup size ranging from 100 to 120, seed = 1)."}
+p2 + ylim
 ```
 
 ### U- and U'-charts from random poisson data {-}
 
-```{r ruchart, fig.cap="U chart from 24 random data from a poisson distribution (mean = 25, subgroup size ranging from 90 to 110)."}
-set.seed(1)
+```{r ruchart, fig.cap="U chart from 24 random data from a poisson distribution (mean = 25, subgroup size ranging from 90 to 110, seed = 2)."}
+set.seed(2)
 x <- 1:24
 n <- (runif(24, 90, 110))
 y <- rpois(24, 25)
@@ -406,11 +386,12 @@ p2 <- compplot(x, y, n, chart = 'up', title = NULL)
 
 ylim <- range(layer_scales(p1)$y$range$range,
               layer_scales(p2)$y$range$range)
+ylim <- scale_y_continuous(limits = ylim)
 
-p1 + scale_y_continuous(limits = ylim)
+p1 + ylim
 ```
 
-```{r rupchart, fig.cap="U'-chart from 24 random data from a poisson distribution."}
+```{r rupchart, fig.cap="U'-chart from 24 random data from a poisson distribution (mean = 25, subgroup size ranging from 90 to 110, seed = 2)."}
 
-p2 + scale_y_continuous(limits = ylim)
+p2 + ylim
 ```
