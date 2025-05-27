@@ -4,10 +4,11 @@ author: "Jacob Anhøj, Wayne Taylor & Mohammed Amin Mohammed"
 date: "`r Sys.Date()` WORK IN PROGRESS"
 output:
   bookdown::html_document2:
+    self_contained: true
     toc: true
     toc_float: true
     css: style.css
-bibliography: [references.bib]
+bibliography: references.bib
 csl: bmj-quality-and-safety.csl
 link-citations: true
 editor_options:
@@ -23,10 +24,9 @@ knitr::opts_chunk$set(echo      = FALSE,
                       dev       = 'svg')
 
 library(qicharts2)
-# library(patchwork)
 library(tidyverse)
 
-bac <- read_csv('data/bacteremia.csv', comment = '#')
+bac   <- read_csv('data/bacteremia.csv', comment = '#')
 hba1c <- read_csv('data/diabetes_hba1c.csv', comment = '#')
 
 # Function to plot control limits from the I'-chart on top of Shewhart chart
@@ -46,9 +46,9 @@ compplot <- function(x, y, n = NULL, chart, ...) {
 
 Statistical Process Control (SPC) is widely used in healthcare to monitor and improve care quality by distinguishing between common and special cause variation using SPC charts. However, selecting the appropriate chart can be challenging due to complex data types and limited statistical training. The Individuals I-chart is popular for its simplicity but assumes constant subgroup sizes -- a condition often violated in healthcare, where denominators such as numbers of patients or observation periods vary over time. Misapplication of the I-chart in these contexts can lead to misleading control limits and unreliable signals.
 
-This paper introduces the I-prime (I') chart, which was developed to accommodate varying denominators and handle both measurement and count data. We evaluate the performance of the I'-chart using a range of healthcare datasets, guided by three key questions: a) How does the I'-chart compare to the I-chart for subgroup sizes of one? b) How does it handle varying subgroup sizes? And c) how does it perform relative to other common SPC charts?
+This paper introduces the normalised I-chart or I'-chart, which was developed to accommodate varying denominators and handle both measurement and count data. We evaluate the performance of the I'-chart using a range of healthcare datasets, guided by three key questions: a) How does the I'-chart compare to the I-chart for constant subgroup sizes? b) How does it handle varying subgroup sizes? And c) how does it perform relative to other common SPC charts?
 
-We report three main findings: a) The I'-chart produces identical results to the I-chart when applied to individual data (subgroup size = 1). b) It generates “wavy” control limits when subgroup sizes vary, making the precision of the data more explicit and aiding interpretation while reducing false or missed signals. c) For attribute data, the I'-chart approximates the performance of Laney's P'- and U'-charts, and it aligns well with other commonly used SPC charts.
+We report three main findings: a) The I'-chart produces identical results to the I-chart when applied to individual data with constant subgroup sizes. b) It generates “wavy” control limits when subgroup sizes vary, making the precision of the data more explicit and aiding interpretation while reducing false or missed signals. c) For attribute data, the I'-chart approximates the performance of Laney's P'- and U'-charts, and it aligns well with other commonly used SPC charts.
 
 In conclusion, the I'-chart has superior design properties to the traditional I-chart and merits broader use and evaluation, it has the potential to replace other commonly used SPC charts, and the use of the traditional I-chart for data with varying denominators is increasingly difficult to justify.
 
@@ -143,7 +143,7 @@ $$
 \text{control limits} = CL \pm 3 \frac{\bar{s}}{\sqrt{d_i}}
 $$
 
-Note that when the denominator is 1, the formula simplifies to the standard I-chart form: $CL\pm2.66\overline{MR}$.
+Note that when the subgroup sizes (d~i~) are all equal, the formula simplifies to the standard I-chart form: $CL\pm2.66\overline{MR}$.
 
 ### Data and software
 
@@ -165,7 +165,7 @@ The following plots highlight our main findings based on real-world healthcare d
 
 ### I'-chart for measurement data
 
-Figure \@ref(fig:ichart) shows an I-chart of the monthly HbA1c averages from Table \@ref(tab:tabhba1c) assuming constant subgroup sizes (denominator = 1). As expected, the control limits exactly match those of the corresponding I'-chart (not shown). Notice the data point above the upper control limit in April 2020 suggesting a special cause. However, when plotting aggregated measurement data, the I-chart does not account for variations in subgroup size.
+Figure \@ref(fig:ichart) shows an I-chart of the monthly HbA1c averages from Table \@ref(tab:tabhba1c). As expected, the control limits exactly match those of the corresponding I'-chart with denominators all set to 1 (not shown). Notice the data point above the upper control limit in April 2020 suggesting a special cause. However, when plotting aggregated measurement data, the I-chart does not account for variations in subgroup size.
 
 ```{r ichart, fig.cap="I-chart of average HbA1c without denominator. The grey region represents the region between the control limits."}
 qic(month, avg_hba1c,
@@ -232,7 +232,7 @@ We introduced and evaluated the performance and applicability of the I'-chart, a
 
 We have three key findings:
 
-a.  The I'-chart produces results that exactly matches the original I-chart when applied to individual measurement data (subgroup size = 1). This validates the I'-chart as a generalization rather than a replacement, ensuring continuity for users familiar with the original method.
+a.  The I'-chart produces results that exactly matches the original I-chart when applied to individual measurement data with constant subgroup sizes. This validates the I'-chart as a generalization rather than a replacement, ensuring continuity for users familiar with the original method.
 
 a. The I'-chart produces control limits that are "wavy" or undulating when denominators change over time. This visual representation offers added insight, making variability in data precision explicit and encouraging more insightful interpretation, while reducing the risk of false signals or missed alarms.
 
