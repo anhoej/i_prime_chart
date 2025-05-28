@@ -9,27 +9,31 @@
 # jacob@anhoej.net
 ################################################################################
 
-# User defined unction ----
+# User defined function ----
 # Function to plot control limits from the I'-chart on top of Shewhart chart
 # x:     subgroup
 # y:     numerator
 # n:     denominator
 # chart: Shewhart chart
 # ...:   additional graphical parameters, e.g. titles
+
 compplot <- function(x, y, n = NULL, chart, ...) {
   p1 <- qic(x, y, n, chart = chart, ...)  # original Shewhart chart
   p2 <- qic(x, y, n, chart = 'ip', ...)   # I'-chart
   
   p1 +                                         # original chart
     ggplot2::geom_line(ggplot2::aes(y = lcl),  # LCL from I'-chart
-                       data   = p2$data, 
+                       data   = p2$data,
+                       linetype = 'dashed',
                        colour = 'tomato') +    # UCL from I'-chart
     ggplot2::geom_line(ggplot2::aes(y = ucl),
-                       data   = p2$data, 
+                       data   = p2$data,
+                       linetype = 'dashed',
                        colour = 'tomato')
 }
 
 # Load qicharts2 package ----
+
 library(qicharts2)
 
 # Import data ----

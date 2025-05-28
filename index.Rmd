@@ -1,7 +1,7 @@
 ---
-title: "Introducing the I'-chart: an improved individuals chart"
+title: "Introducing the I'-chart: an improved individuals chart for quality improvement and control"
 author: "Jacob Anhøj, Wayne Taylor & Mohammed Amin Mohammed"
-date: "`r Sys.Date()` WORK IN PROGRESS"
+date: "`r Sys.Date()`"
 output:
   bookdown::html_document2:
     self_contained: true
@@ -33,10 +33,16 @@ hba1c <- read_csv('data/diabetes_hba1c.csv', comment = '#')
 compplot <- function(x, y, n = NULL, chart, ...) {
   p1 <- qic(x, y, n, chart = chart, ...)
   p2 <- qic(x, y, n, chart = 'ip', ...)
- 
+  
   p1 +
-    geom_line(aes(y = lcl), data = p2$data, colour = 'tomato') +
-    geom_line(aes(y = ucl), data = p2$data, colour = 'tomato')
+    geom_line(aes(y = lcl),
+              data     = p2$data,
+              linetype = 'dashed',
+              colour   = 'tomato') +
+    geom_line(aes(y = ucl),
+              data     = p2$data,
+              linetype = 'dashed',
+              colour   = 'tomato')
 }
 ```
 
@@ -46,11 +52,22 @@ compplot <- function(x, y, n = NULL, chart, ...) {
 
 Statistical Process Control (SPC) is widely used in healthcare to monitor and improve care quality by distinguishing between common and special cause variation using SPC charts. However, selecting the appropriate chart can be challenging due to complex data types and limited statistical training. The Individuals I-chart is popular for its simplicity but assumes constant subgroup sizes -- a condition often violated in healthcare, where denominators such as numbers of patients or observation periods vary over time. Misapplication of the I-chart in these contexts can lead to misleading control limits and unreliable signals.
 
-This paper introduces the normalised I-chart or I'-chart, which was developed to accommodate varying denominators and handle both measurement and count data. We evaluate the performance of the I'-chart using a range of healthcare datasets, guided by three key questions: a) How does the I'-chart compare to the I-chart for constant subgroup sizes? b) How does it handle varying subgroup sizes? And c) how does it perform relative to other common SPC charts?
+This paper introduces the normalised I-chart, or I'-chart, which was developed to accommodate varying denominators and handle both measurement and count data. We evaluate the performance of the I'-chart using a range of healthcare datasets, guided by three key questions: a) How does the I'-chart compare to the I-chart for constant subgroup sizes? b) How does it handle varying subgroup sizes? And c) how does it perform relative to other common SPC charts?
 
 We report three main findings: a) The I'-chart produces identical results to the I-chart when applied to individual data with constant subgroup sizes. b) It generates “wavy” control limits when subgroup sizes vary, making the precision of the data more explicit and aiding interpretation while reducing false or missed signals. c) For attribute data, the I'-chart approximates the performance of Laney's P'- and U'-charts, and it aligns well with other commonly used SPC charts.
 
 In conclusion, the I'-chart has superior design properties to the traditional I-chart and merits broader use and evaluation, it has the potential to replace other commonly used SPC charts, and the use of the traditional I-chart for data with varying denominators is increasingly difficult to justify.
+
+----
+
+* **What is already known on this topic**<br>
+Traditional I-charts are widely used in healthcare quality improvement but assume constant subgroup sizes, which can produce misleading control limits and unreliable signals.
+
+* **What this study adds**<br>
+The I'-chart improves upon the I-chart by adjusting for varying subgroup sizes, offering more accurate control limits and better distinction between common and special cause variation.
+
+* **How this study might affect research, practice or policy**<br>
+The I'-chart has the potential to replace other commonly used SPC charts, simplifying implementation and easing the adoption of SPC methodology in healthcare.
 
 ----
 
@@ -72,7 +89,7 @@ In many healthcare contexts, this assumption does not hold. For instance, the nu
 
 To address this limitation, Taylor recently proposed the normalised I-chart or the I'-chart (pronounced: I-prime chart), a modified version of the I-chart, that accommodates varying subgroup sizes [@taylor2018].
 
-In this paper, we introduce the I'-chart, outline its theoretical foundation and evaluate its performance using a range of healthcare data sets. Our paper is guided by the following practical questions:
+In this paper, we introduce the I'-chart, outline its theoretical foundation and evaluate its performance using a range of healthcare and synthetic data sets. Our paper is guided by the following practical questions:
 
 a. How does the I'-chart compare to the I-chart for subgroup sizes of one?
 
@@ -149,9 +166,7 @@ Note that when the subgroup sizes (d~i~) are all equal, the formula simplifies t
 
 To demonstrate the application of I'-charts on measurement data with varying subgroup sizes we used data from a regional outpatient clinic for children with diabetes. For privacy purposes, data were aggregated in advance including the monthly number of children who visited the clinic and their average glycated haemoglobin (HbA1c, a measure of long term blood glucose levels). 
 
-To demonstrate the application of I'-charts on count data we used data on bacteremia cases and mortality.
-
-Data are tabulated in Appendix 1.
+To demonstrate the application of I'-charts on count data we used data on bacteremia cases and mortality. Data sets are tabulated in [Appendix 1](#app1).
 
 To construct the control charts, we used R version 4.5.0 [@r-core] with the add-on package qicharts2 version 0.8.0  [@qicharts2], which contains functions for Shewhart control charts in addition to functions for Laney's prime charts (P' and U') and for the I'-chart.
 
@@ -161,7 +176,7 @@ Additionally, we constructed a large number of I'-charts using both pseudo-rando
 
 ## Results
 
-The following plots highlight our main findings based on real-world healthcare data, with Appendix 2 providing additional examples that demonstrate a variety of outcomes generated from pseudo-random data.
+The following plots highlight our main findings based on real-world healthcare data. Additional examples that demonstrate a variety of outcomes generated from pseudo-random data are  provided in [Appendix 2](#app2).
 
 ### I'-chart for measurement data
 
@@ -193,11 +208,11 @@ Also, notice that the centre lines are a bit different (60.6 vs 60.3), because t
 
 ### I'-chart for count data
 
-In the following plots, the control limits from the I'-chart algorithm are superimposed as red lines on the original Shewhart charts.
+In the following plots, the control limits from the I'-chart algorithm are superimposed as dashed lines on the original Shewhart charts.
 
 Figure \@ref(fig:pchart) is a P control chart of the percentage of patients with bacteremia, from Table \@ref(tab:tabbac), who died within 30 days after infection. As seen, the I'-chart limits are (in this case) a bit wider. The difference is, for practical purposes, negligible, which is generally the case when counts are low and follow the binomial distribution.  However, this assumption frequently does not hold for higher counts, and the I'- and P'-charts are preferred.
 
-```{r pchart, fig.cap="P-chart of proportion patients who died of bacteremia. Grey background: control limits from P-chart. Red lines: control limits from I'-chart."}
+```{r pchart, fig.cap="P-chart of proportion patients who died of bacteremia. Grey background: control limits from P-chart. Dashed lines: control limits from I'-chart."}
 compplot(bac$month, bac$deaths, bac$patients,
          chart = 'p',
          title = NULL,
@@ -208,7 +223,7 @@ This observation is consistent with our experience testing a variety of datasets
 
 Figure \@ref(fig:ppchart) plots the same data as Figure \@ref(fig:pchart) but the original control limits have been calculated using the procedure for P'-charts as suggested by Laney [@laney2002; @mohammed2013].
 
-```{r ppchart, fig.cap="P'-chart of proportion patients who died of bacteremia. Grey background: control limits from P'-chart.  Red lines: control limits from I'-chart."}
+```{r ppchart, fig.cap="P'-chart of proportion patients who died of bacteremia. Grey background: control limits from P'-chart.  Dashed lines: control limits from I'-chart."}
 compplot(bac$month, bac$deaths, bac$patients,
          chart = 'pp',
          title = NULL,
@@ -217,7 +232,7 @@ compplot(bac$month, bac$deaths, bac$patients,
 
 As seen (and expected from theory), the I'-chart limits match the P'-chart limits. The same goes for U'-charts as demonstrated in Figure \@ref(fig:upchart).
 
-```{r upchart, fig.cap="U'-chart of infection rates. Grey background: control limits from U'-chart.  Red lines: control limits from I'-chart."}
+```{r upchart, fig.cap="U'-chart of infection rates. Grey background: control limits from U'-chart.  Dashed lines: control limits from I'-chart."}
 compplot(bac$month, bac$ha_infections, bac$risk_days,
          chart = 'up',
          multiply = 10000,
@@ -262,39 +277,29 @@ We are keen to learn how others in the field perceive its value and whether it e
 
 ----
 
-## Appendix 1: Data sets {-}
+## Appendix 1: Data sets {- #app1}
 
 ### Diabetes HbA1c data {-}
 
-* 43 observations of 3 variables:
-    - month (date): month of measurements
-    - avg_hba1c (numeric): average of HbA1c measurements
-    - n (integer): number of patients
-
-```{r tabhba1c, tab.cap='Diabetes HbA1c data set.'}
+```{r tabhba1c, tab.cap="Diabetes HbA1c data set. 43 observations of 3 variables: month = month of measurements, avg_hba1c = average of HbA1c measurements, n = number of patients"}
 knitr::kable(hba1c)
 ```
 
 ### Bacteremia data {-}
 
-* 24 observations of 5 variables:
-    - month (date): month of infection
-    - ha_infections (numeric): number of hospital acquired infections
-    - risk_days (numeric): number of patient days without infection
-    - deaths (numeric): 30-day mortality after all-cause (community + hospital) infection
-    - patients (numeric): number of patients with all-cause infection
-
-```{r tabbac, tab.cap='Bacteremia data set.'}
+```{r tabbac, tab.cap="Bacteremia data set. 24 observations of 5 variables: month = month of infection, ha_infections: number of hospital acquired infections, risk_days = number of patient days without infection, deaths = 30-day mortality after all-cause (community + hospital) infection,  patients = number of patients with all-cause infection"}
 knitr::kable(bac)
 ```
 
-## Appendix 2: Supplementary plots {-}
+----
+
+## Appendix 2: Supplementary plots {- #app2}
 
 The following plots were generated in R using pseudo-random data sampled from normal, binomial, and Poisson distributions. To illustrate a range of possible outcomes while ensuring reproducibility, we set different seed values for the random number generator.
 
 ### I- and I'-charts from individual random normal measurements {-}
 
-```{r richart, fig.cap="I-chart from 24 random data from a normal distribution (mean = 20, SD = 3, seed = 1) without denominator. Grey background: control limits from I-chart.  Red lines: control limits from I'-chart."}
+```{r richart, fig.cap="I-chart from 24 random data from a normal distribution (mean = 20, SD = 3, seed = 1) without denominator. Grey background: control limits from I-chart.  Dashed lines: control limits from I'-chart."}
 set.seed(1)                   # fix random number generator
 x <- 1:24                     # subgroups
 y <- rnorm(24, 20, 3)         # numerators
@@ -309,13 +314,13 @@ ylim <- scale_y_continuous(limits = ylim)
 p1 + ylim
 ```
 
-```{r ripchart, fig.cap="I'-chart from 24 random, normal data (mean = 20, SD = 3, seed = 1) with denominators ranging from 80 to 120. Grey background: control limits from I-chart.  Red lines: control limits from I'-chart."}
+```{r ripchart, fig.cap="I'-chart from 24 random, normal data (mean = 20, SD = 3, seed = 1) with denominators ranging from 80 to 120. Grey background: control limits from I-chart.  Dashed lines: control limits from I'-chart."}
 p2 + ylim
 ```
 
 ### Xbar-charts from multiple random normal measurements {-}
 
-```{r rxbarchart1, fig.cap="Xbar-chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 1). I' limits a bit wider than Xbar limits. Grey background: control limits from Xbar-chart.  Red lines: control limits from I'-chart."}
+```{r rxbarchart1, fig.cap="Xbar-chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 1). I' limits a bit wider than Xbar limits. Grey background: control limits from Xbar-chart.  Dashed lines: control limits from I'-chart."}
 set.seed(1)
 x <- rep(1:24, round(runif(24, 10, 20)))
 y <- rnorm(length(x), 9)
@@ -340,19 +345,19 @@ p1 + ylim
 
 ```
 
-```{r rxbarchart2, fig.cap="Xbar-chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 6). I' limits close to Xbar limits. Grey background: control limits from Xbar-chart.  Red lines: control limits from I'-chart."}
+```{r rxbarchart2, fig.cap="Xbar-chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 6). I' limits close to Xbar limits. Grey background: control limits from Xbar-chart.  Dashed lines: control limits from I'-chart."}
 
 p2 + ylim
 ```
 
-```{r rxbarchart3, fig.cap="Xbar-chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 8). I' limits a bit tigther than Xbar limits. Grey background: control limits from Xbar-chart.  Red lines: control limits from I'-chart."}
+```{r rxbarchart3, fig.cap="Xbar-chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 8). I' limits a bit tigther than Xbar limits. Grey background: control limits from Xbar-chart.  Dashed lines: control limits from I'-chart."}
 
 p3 + ylim
 ```
 
 ### P- and P'-charts from random binomial data {-}
 
-```{r rppchart, fig.cap="P-chart of 24 random data from a binomial distribution (p = 0.1, subgroup size ranging from 100 to 120, seed = 1). Grey background: control limits from P-chart.  Red lines: control limits from I'-chart."}
+```{r rppchart, fig.cap="P-chart of 24 random data from a binomial distribution (p = 0.1, subgroup size ranging from 100 to 120, seed = 1). Grey background: control limits from P-chart.  Dashed lines: control limits from I'-chart."}
 set.seed(1)
 x <- 1:24
 n <- round(runif(24, 100, 120))
@@ -369,13 +374,13 @@ ylim <- scale_y_continuous(limits = ylim)
 p1 + ylim
 ```
 
-```{r rpchart, fig.cap="P'-chart of 24 random data from a binomial distribution (p = 0.1, subgroup size ranging from 100 to 120, seed = 1). Grey background: control limits from P'-chart.  Red lines: control limits from I'-chart."}
+```{r rpchart, fig.cap="P'-chart of 24 random data from a binomial distribution (p = 0.1, subgroup size ranging from 100 to 120, seed = 1). Grey background: control limits from P'-chart.  Dashed lines: control limits from I'-chart."}
 p2 + ylim
 ```
 
 ### U- and U'-charts from random poisson data {-}
 
-```{r ruchart, fig.cap="U-chart from 24 random data from a poisson distribution (mean = 25, subgroup size ranging from 90 to 110, seed = 2). Grey background: control limits from U'-chart.  Red lines: control limits from I'-chart."}
+```{r ruchart, fig.cap="U-chart from 24 random data from a poisson distribution (mean = 25, subgroup size ranging from 90 to 110, seed = 2). Grey background: control limits from U'-chart.  Dashed lines: control limits from I'-chart."}
 set.seed(2)
 x <- 1:24
 n <- (runif(24, 90, 110))
@@ -391,7 +396,7 @@ ylim <- scale_y_continuous(limits = ylim)
 p1 + ylim
 ```
 
-```{r rupchart, fig.cap="U'-chart from 24 random data from a poisson distribution (mean = 25, subgroup size ranging from 90 to 110, seed = 2). Grey background: control limits from U'-chart.  Red lines: control limits from I'-chart."}
+```{r rupchart, fig.cap="U'-chart from 24 random data from a poisson distribution (mean = 25, subgroup size ranging from 90 to 110, seed = 2). Grey background: control limits from U'-chart.  Dashed lines: control limits from I'-chart."}
 
 p2 + ylim
 ```
