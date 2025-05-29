@@ -11,7 +11,7 @@
 
 <meta name="author" content="Jacob Anhøj, Wayne Taylor &amp; Mohammed Amin Mohammed" />
 
-<meta name="date" content="2025-05-28" />
+<meta name="date" content="2025-05-29" />
 
 <title>Introducing the I’-chart: an improved individuals chart for quality improvement and control</title>
 
@@ -1515,7 +1515,7 @@ border-radius: 0px;
 
 <h1 class="title toc-ignore">Introducing the I’-chart: an improved individuals chart for quality improvement and control</h1>
 <h4 class="author">Jacob Anhøj, Wayne Taylor &amp; Mohammed Amin Mohammed</h4>
-<h4 class="date">2025-05-28</h4>
+<h4 class="date">2025-05-29</h4>
 
 </div>
 
@@ -1525,7 +1525,7 @@ border-radius: 0px;
 <h2>Abstract</h2>
 <p>Statistical Process Control (SPC) is widely used in healthcare to monitor and improve care quality by distinguishing between common and special cause variation using SPC charts. However, selecting the appropriate chart can be challenging due to complex data types and limited statistical training. The Individuals I-chart is popular for its simplicity but assumes constant subgroup sizes – a condition often violated in healthcare, where denominators such as numbers of patients or observation periods vary over time. Misapplication of the I-chart in these contexts can lead to misleading control limits and unreliable signals.</p>
 <p>This paper introduces the normalised I-chart, or I’-chart, which was developed to accommodate varying denominators and handle both measurement and count data. We evaluate the performance of the I’-chart using a range of healthcare datasets, guided by three key questions: a) How does the I’-chart compare to the I-chart for constant subgroup sizes? b) How does it handle varying subgroup sizes? And c) how does it perform relative to other common SPC charts?</p>
-<p>We report three main findings: a) The I’-chart produces identical results to the I-chart when applied to individual data with constant subgroup sizes. b) It generates “wavy” control limits when subgroup sizes vary, making the precision of the data more explicit and aiding interpretation while reducing false or missed signals. c) For attribute data, the I’-chart approximates the performance of Laney’s P’- and U’-charts, and it aligns well with other commonly used SPC charts.</p>
+<p>We report three main findings: a) The I’-chart produces identical results to the I-chart when applied to individual measurement data with constant subgroup sizes. b) It generates “wavy” control limits when subgroup sizes vary, making the precision of the data more explicit and aiding interpretation while reducing false or missed signals. c) For attribute data, the I’-chart approximates the performance of Laney’s P’- and U’-charts, and it aligns well with other commonly used SPC charts.</p>
 <p>In conclusion, the I’-chart has superior design properties to the traditional I-chart and merits broader use and evaluation, it has the potential to replace other commonly used SPC charts, and the use of the traditional I-chart for data with varying denominators is increasingly difficult to justify.</p>
 <hr />
 <ul>
@@ -1548,7 +1548,7 @@ The I’-chart has the potential to replace other commonly used SPC charts, simp
 <p>Unlike other SPC charts, the I-chart estimates process variation directly from the moving ranges between successive data points <span class="citation">[<a href="#ref-nelson1982">8</a>]</span>. So the I-chart operates under a key assumption: that each data point reflects the same underlying area of opportunity – for example, comparable patient volumes, observation periods, or sample sizes.</p>
 <p>In many healthcare contexts, this assumption does not hold. For instance, the number of patients with post-surgical complications depends on the number of patients who underwent surgery – a denominator that often varies over time. When such variation in subgroup sizes exists, the use of the I-chart becomes problematic, as it assumes a (nearly) constant area of opportunity. This mismatch can result in misleading control limits, which is why the use of the I-chart for such data remains controversial.</p>
 <p>To address this limitation, Taylor recently proposed the normalised I-chart or the I’-chart (pronounced: I-prime chart), a modified version of the I-chart, that accommodates varying subgroup sizes <span class="citation">[<a href="#ref-taylor2018">9</a>]</span>.</p>
-<p>In this paper, we introduce the I’-chart, outline its theoretical foundation and evaluate its performance using a range of healthcare and synthetic data sets. Our paper is guided by the following practical questions:</p>
+<p>In this paper, we introduce the I’-chart, outline its theoretical foundation and evaluate its performance using a range of healthcare and synthetic data sets. Our study is guided by the following practical questions:</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>How does the I’-chart compare to the I-chart for subgroup sizes of one?</p></li>
 <li><p>How does the I’-chart accommodate varying subgroup sizes?</p></li>
@@ -1605,7 +1605,8 @@ s_i = \sqrt{\frac{\pi}{2}}\frac{\vert{}y_i-y_{i-1}\vert{}}{\sqrt{\frac{1}{d_i}+\
 <div id="data-and-software" class="section level3" number="2.2">
 <h3><span class="header-section-number">2.2</span> Data and software</h3>
 <p>To demonstrate the application of I’-charts on measurement data with varying subgroup sizes we used data from a regional outpatient clinic for children with diabetes. For privacy purposes, data were aggregated in advance including the monthly number of children who visited the clinic and their average glycated haemoglobin (HbA1c, a measure of long term blood glucose levels).</p>
-<p>To demonstrate the application of I’-charts on count data we used data on bacteremia cases and mortality. Data sets are tabulated in <a href="#app1">Appendix 1</a>.</p>
+<p>To demonstrate the application of I’-charts on count data we used data on bacteremia cases and mortality.</p>
+<p>Data sets are tabulated in <a href="#app1">Appendix 1</a>.</p>
 <p>To construct the control charts, we used R version 4.5.0 <span class="citation">[<a href="#ref-r-core">10</a>]</span> with the add-on package qicharts2 version 0.8.0 <span class="citation">[<a href="#ref-qicharts2">11</a>]</span>, which contains functions for Shewhart control charts in addition to functions for Laney’s prime charts (P’ and U’) and for the I’-chart.</p>
 <!-- Data sets and R code are available from the GitHub repository (https://github.com/anhoej/i_prime_chart). -->
 <p>Additionally, we constructed a large number of I’-charts using both pseudo-random data from normal, binomial, and Poisson distributions as well as real-world data sets from clinical practice.</p>
