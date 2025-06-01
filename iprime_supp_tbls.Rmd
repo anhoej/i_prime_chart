@@ -1,0 +1,45 @@
+---
+title: "Introducing the I'-chart: an improved individuals chart for quality improvement and control"
+# author: "Jacob Anhøj, Wayne Taylor & Mohammed Amin Mohammed"
+date: "`r Sys.Date()`"
+output:
+  bookdown::word_document2:
+      reference_docx: "paper_template.docx"
+      number_sections: false
+    # self_contained: true
+    # toc: true
+    # toc_float: true
+    # css: style.css
+bibliography: references.bib
+csl: bmj-quality-and-safety.csl
+link-citations: true
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo      = FALSE,
+                      # cache     = TRUE,
+                      message   = FALSE,
+                      fig.asp   = 0.5,
+                      fig.width = 9)
+
+bac   <- readr::read_csv('data/bacteremia.csv', comment = '#')
+hba1c <- readr::read_csv('data/diabetes_hba1c.csv', comment = '#')
+```
+
+## Supplementary materials: Tables
+
+### Diabetes HbA1c data {-}
+
+```{r tabhba1c, tab.cap="Diabetes HbA1c data set. 43 observations of 3 variables: month = month of measurements, avg_hba1c = average of HbA1c measurements, n = number of patients"}
+
+knitr::kable(hba1c)
+```
+
+### Bacteremia data {-}
+
+```{r tabbac, tab.cap="Bacteremia data set. 24 observations of 5 variables: month = month of infection, ha_infections: number of hospital acquired infections, risk_days = number of patient days without infection, deaths = 30-day mortality after all-cause (community + hospital) infection,  patients = number of patients with all-cause infection"}
+
+knitr::kable(bac)
+```

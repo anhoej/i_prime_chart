@@ -1,0 +1,254 @@
+---
+title: "Introducing the I'-chart: an improved individuals chart for quality improvement and control"
+# author: "Jacob Anhøj, Wayne Taylor & Mohammed Amin Mohammed"
+date: "`r Sys.Date()`"
+output:
+  bookdown::word_document2:
+      reference_docx: "paper_template.docx"
+      number_sections: false
+    # self_contained: true
+    # toc: true
+    # toc_float: true
+    # css: style.css
+bibliography: references.bib
+csl: bmj-quality-and-safety.csl
+link-citations: true
+editor_options:
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo      = FALSE,
+                      # cache     = TRUE,
+                      message   = FALSE,
+                      fig.asp   = 0.5,
+                      fig.width = 9)
+
+library(qicharts2)
+library(tidyverse)
+
+bac   <- read_csv('data/bacteremia.csv', comment = '#')
+hba1c <- read_csv('data/diabetes_hba1c.csv', comment = '#')
+
+# Function to plot control limits from the I'-chart on top of Shewhart chart
+compplot <- function(x, y, n = NULL, chart, ...) {
+  p1 <- qic(x, y, n, chart = chart, ...)
+  p2 <- qic(x, y, n, chart = 'ip', ...)
+  
+  p1 +
+    geom_line(aes(y = lcl),
+              data     = p2$data,
+              linetype = 'dashed',
+              colour   = 'tomato') +
+    geom_line(aes(y = ucl),
+              data     = p2$data,
+              linetype = 'dashed',
+              colour   = 'tomato')
+}
+```
+
+
+## Supplementary materials: Plots
+
+### I'-chart for measurement data
+
+```{r ichart, fig.cap='(ref:ichart)'}
+qic(month, avg_hba1c,
+    data = hba1c,
+    chart = 'i',
+    title = NULL,
+    ylab = 'mmol / mol',
+    xlab = 'Month')
+```
+
+```{r ipchart, fig.cap='(ref:ipchart)'}
+qic(month, avg_hba1c * n, n,
+    data = hba1c,
+    chart = 'ip',
+    title = NULL,
+    ylab = 'mmol / mol',
+    xlab = 'Month')
+```
+
+```{r pchart, fig.cap='(ref:pchart)'}
+compplot(bac$month, bac$deaths, bac$patients,
+         chart = 'p',
+         title = NULL,
+         xlab = 'Month')
+```
+
+```{r ppchart, fig.cap='(ref:ppchart)'}
+compplot(bac$month, bac$deaths, bac$patients,
+         chart = 'pp',
+         title = NULL,
+         xlab = 'Month')
+```
+
+```{r upchart, fig.cap='(ref:upchart)'}
+compplot(bac$month, bac$ha_infections, bac$risk_days,
+         chart = 'up',
+         multiply = 10000,
+         title = NULL,
+         ylab = 'Infections per 10,000 risk days',
+         xlab = 'Month')
+```
+
+### I- and I'-charts from individual random normal measurements {-}
+
+```{r richart, fig.cap='(ref:richart)'}
+set.seed(1)                   # fix random number generator
+x <- 1:24                     # subgroups
+y <- rnorm(24, 20, 3)         # numerators
+n <- runif(24, 80, 120)       # denominators
+
+p1 <- compplot(x, y, chart = 'i', title = NULL)
+p2 <- compplot(x, y * n, n, chart = 'i', title = NULL)
+
+ylim <- range(layer_scales(p1)$y$range$range,
+              layer_scales(p2)$y$range$range)
+ylim <- scale_y_continuous(limits = ylim)
+p1 + ylim
+```
+
+```{r ripchart, fig.cap='(ref:ripchart)'}
+p2 + ylim
+```
+
+### Xbar-charts from multiple random normal measurements {-}
+
+```{r rxbarchart1, fig.cap='(ref:rxbarchart1)'}
+set.seed(1)
+x <- rep(1:24, round(runif(24, 10, 20)))
+y <- rnorm(length(x), 9)
+p1 <- compplot(x, y, chart = 'xbar', title = NULL)
+
+set.seed(6)
+x <- rep(1:24, round(runif(24, 10, 20)))
+y <- rnorm(length(x), 9)
+p2 <- compplot(x, y, chart = 'xbar', title = NULL)
+
+set.seed(8)
+x <- rep(1:24, round(runif(24, 10, 20)))
+y <- rnorm(length(x), 9)
+p3 <- compplot(x, y, chart = 'xbar', title = NULL)
+
+ylim <- range(layer_scales(p1)$y$range$range,
+              layer_scales(p2)$y$range$range,
+              layer_scales(p3)$y$range$range)
+ylim <- scale_y_continuous(limits = ylim)
+
+p1 + ylim
+
+```
+
+```{r rxbarchart2, fig.cap='(ref:rxbarchart2)'}
+
+p2 + ylim
+```
+
+```{r rxbarchart3, fig.cap='(ref:rxbarchart3)'}
+
+p3 + ylim
+```
+
+### P- and P'-charts from random binomial data {-}
+
+```{r rpchart, fig.cap='(ref:rpchart)'}
+set.seed(1)
+x <- 1:24
+n <- round(runif(24, 100, 120))
+y <- rbinom(24, n, 0.1)
+
+p1 <- compplot(x, y, n, 'p', title = NULL)
+p2 <- compplot(x, y, n, 'pp', title = NULL)
+
+
+ylim <- range(layer_scales(p1)$y$range$range,
+              layer_scales(p2)$y$range$range)
+ylim <- scale_y_continuous(limits = ylim)
+
+p1 + ylim
+```
+
+```{r rppchart, fig.cap='(ref:rppchart)'}
+p2 + ylim
+```
+
+### U- and U'-charts from random poisson data {-}
+
+```{r ruchart, fig.cap='(ref:ruchart)'}
+set.seed(2)
+x <- 1:24
+n <- (runif(24, 90, 110))
+y <- rpois(24, 25)
+
+p1 <- compplot(x, y, n, chart = 'u', title = NULL)
+p2 <- compplot(x, y, n, chart = 'up', title = NULL)
+
+ylim <- range(layer_scales(p1)$y$range$range,
+              layer_scales(p2)$y$range$range)
+ylim <- scale_y_continuous(limits = ylim)
+
+p1 + ylim
+```
+
+```{r rupchart, fig.cap='(ref:rupchart)'}
+
+p2 + ylim
+```
+
+(ref:ichart) I-chart of average HbA1c without denominator. The grey region represents the region between the control limits.
+
+(ref:ipchart) I'-chart of average HbA1c with denominator.
+
+(ref:pchart) P-chart of proportion patients who died of bacteremia. Grey background: control limits from P-chart. Dashed lines: control limits from I'-chart.
+
+(ref:ppchart) P'-chart of proportion patients who died of bacteremia. Grey background: control limits from P'-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:upchart) U'-chart of infection rates. Grey background: control limits from U'-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:richart) I-chart from 24 random data from a normal distribution (mean = 20, SD = 3, seed = 1) without denominator. Grey background: control limits from I-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:ripchart) I'-chart from 24 random, normal data (mean = 20, SD = 3, seed = 1) with denominators ranging from 80 to 120. Grey background: control limits from I-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:rxbarchart1) Xbar-chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 1). I' limits a bit wider than Xbar limits. Grey background: control limits from Xbar-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:rxbarchart2) Xbar-chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 6). I' limits close to Xbar limits. Grey background: control limits from Xbar-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:rxbarchart3) Xbar-chart from 24 subgroups of 10 to 20 random normal data (mean = 9, SD = 1, seed = 8). I' limits a bit tigther than Xbar limits. Grey background: control limits from Xbar-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:rpchart) P-chart of 24 random data from a binomial distribution (p = 0.1, subgroup size ranging from 100 to 120, seed = 1). Grey background: control limits from P-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:rppchart) P'-chart of 24 random data from a binomial distribution (p = 0.1, subgroup size ranging from 100 to 120, seed = 1). Grey background: control limits from P'-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:ruchart) U-chart from 24 random data from a poisson distribution (mean = 25, subgroup size ranging from 90 to 110, seed = 2). Grey background: control limits from U'-chart.  Dashed lines: control limits from I'-chart.
+
+(ref:rupchart) U'-chart from 24 random data from a poisson distribution (mean = 25, subgroup size ranging from 90 to 110, seed = 2). Grey background: control limits from U'-chart.  Dashed lines: control limits from I'-chart.
+
+<!-- Figure \@ref(fig:ichart): (ref:ichart) -->
+
+<!-- Figure \@ref(fig:ipchart): (ref:ipchart) -->
+
+<!-- Figure \@ref(fig:pchart): (ref:pchart) -->
+
+<!-- Figure \@ref(fig:ppchart): (ref:ppchart) -->
+
+<!-- Figure \@ref(fig:upchart): (ref:upchart) -->
+
+<!-- Figure \@ref(fig:richart): (ref:richart) -->
+
+<!-- Figure \@ref(fig:ripchart): (ref:ripchart) -->
+
+<!-- Figure \@ref(fig:rxbarchart1): (ref:rxbarchart1) -->
+
+<!-- Figure \@ref(fig:rxbarchart2): (ref:rxbarchart2) -->
+
+<!-- Figure \@ref(fig:rxbarchart3): (ref:rxbarchart3) -->
+
+<!-- Figure \@ref(fig:rpchart): (ref:rpchart) -->
+
+<!-- Figure \@ref(fig:rppchart): (ref:rppchart) -->
+
+<!-- Figure \@ref(fig:ruchart): (ref:ruchart) -->
+
+<!-- Figure \@ref(fig:rupchart): (ref:rupchart) -->

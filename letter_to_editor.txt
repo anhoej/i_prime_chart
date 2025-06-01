@@ -1,0 +1,18 @@
+To the Editor
+
+Please consider accepting this paper for publication in BMJQS.
+
+Statistical Process Control (SPC) is foundational to healthcare quality improvement, yet many practitioners struggle with choosing the right control chart. The Individuals (I) chart is widely used due to its simplicity and accessibility, but it assumes constant subgroup sizes - an assumption rarely met in real-world healthcare settings. As a result, the I-chart is often misapplied, leading to misleading control limits and unreliable signals that can compromise care quality efforts.
+
+We introduce the I-prime (I') chart, a new SPC tool that retains the intuitive simplicity and interpretability of the I-chart while addressing its key limitations. Designed to accommodate both measurement and count data, the I'-chart adapts gracefully to varying subgroup sizes, offering a more accurate and nuanced picture of process variation.
+
+We believe this work will appeal to a wide range of readers - particularly those in quality improvement roles - because it offers a practical solution to a common problem without sacrificing the usability and clarity that make the I-chart so popular.
+
+Since our study focuses on the use of statistical process control charts, we provide 14 figures to support our findings. The majority of these figures are included in Appendix 2, which - if preferred - can be made available as online-only material.
+
+Additionally, we include two rather large tables in Appendix 1, which may also be provided as online-only material if deemed appropriate.
+
+Sincerely
+
+Jacob Anhøj
+

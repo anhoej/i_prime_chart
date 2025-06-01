@@ -3,11 +3,16 @@
 # an improved individuals chart" by Anhøj, Taylor, and Mohammed.
 #
 # Data are provided as csv files: bacteremia.csv and diabetes_hba1c.csv.
-#
-# 2025-05-27
 # 
-# jacob@anhoej.net
+# Plots are created by the qic() function from the qicharts2 package,
+# version >= 0.8.0.
+#
+# 2025-05-29
 ################################################################################
+
+# Load qicharts2 package ----
+
+library(qicharts2)
 
 # User defined function ----
 # Function to plot control limits from the I'-chart on top of Shewhart chart
@@ -31,10 +36,6 @@ compplot <- function(x, y, n = NULL, chart, ...) {
                        linetype = 'dashed',
                        colour = 'tomato')
 }
-
-# Load qicharts2 package ----
-
-library(qicharts2)
 
 # Import data ----
 
@@ -67,6 +68,7 @@ qic(month, avg_hba1c,
     xlab = 'Month')
 
 ## Figure 2: I'-chart of average HbA1c with denominator.
+##     Multiply numerator by denominator for to keep original scale
 qic(month, avg_hba1c * n, n,
     data  = hba1c,
     chart = 'ip',
